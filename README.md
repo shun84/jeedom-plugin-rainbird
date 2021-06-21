@@ -7,14 +7,16 @@ J'utilise l'**API Python** sur le lien suivant : https://github.com/jbarrancos/p
 
 Plugin qui permet de gerer votre irrigation avec la solution Rainbird avec Jeedom systeme de domotique.
 
-Il vous faut a tout prit le **WIFI Link** : https://wifi.rainbird.com/
+Il vous faut à tout prit le **WIFI Link** : https://wifi.rainbird.com/
 
 # installation
 Installation depuis Github :
 
 > cd /var/www/html/plugins  # ou autre suivant l'installation de votre Jeedom
-> git clone https://github.com/shun84/jeedom-plugin-rainbird.git RainBird
+> 
+> sudo git clone https://github.com/shun84/jeedom-plugin-rainbird.git RainBird
 
+Sinon par le plugin **JeeXplorer**
 
 # Avant la configuration du plugin
 Il faut récupérer l'adresse **IP** et le **Mot de passe** utilisé pour aller dans la configuration sur votre application **Rainbird**.
