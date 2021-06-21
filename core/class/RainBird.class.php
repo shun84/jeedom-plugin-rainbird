@@ -22,7 +22,6 @@ require_once __DIR__ . '/../../resources/apirainbird/ApiRainBird.php';
 
 class RainBird extends eqLogic {
     /*     * *************************Attributs****************************** */
-    const NB_ZONE = 16;
 
   /*
    * Permet de définir les possibilités de personnalisation du widget (en cas d'utilisation de la fonction 'toHtml' par exemple)
@@ -33,8 +32,6 @@ class RainBird extends eqLogic {
     /*     * ***********************Methode static*************************** */
     public function updateRainbird() {
         $apirainbird = new ApiRainBird($this->getConfiguration('iprainbird'), $this->getConfiguration('mdprainbird'));
-//        $getcurrentdate = $apirainbird->get_current_date();
-//        $getraindelay = $apirainbird->get_rain_delay();
 
         $changed = false;
         $changed = $this->checkAndUpdateCmd('daterainbird', $apirainbird->get_current_date()[0]) || $changed;
@@ -51,9 +48,15 @@ class RainBird extends eqLogic {
 
     /*
      * Fonction exécutée automatiquement toutes les minutes par Jeedom
-      public static function cron() {
-      }
      */
+      public static function cron() {
+          foreach (RainBird::byType('RainBird') as $eqLogic) {
+              if ($eqLogic->getIsEnable() == 1) {
+                  $eqLogic->updateRainbird();
+              }
+          }
+      }
+
 
     /*
      * Fonction exécutée automatiquement toutes les 5 minutes par Jeedom
@@ -171,23 +174,18 @@ class RainBird extends eqLogic {
      * Fonction exécutée automatiquement avant la sauvegarde (création ou mise à jour) de l'équipement
      */
     public function preSave() {
-        // Suppression des commandes en trop suite au changement du nombres de zones
-        for ($i = 1; $i <= self::NB_ZONE; $i++){
-            $zone = $this->getCmd(null, 'zone'.$i);
-            $zonelancer = $this->getCmd(null, 'zonelancer'.$i.'');
-            $getzonelancer = $this->getCmd(null, 'getzonelancer'.$i);
-
-            if ($zonelancer){
-                $zonelancer->remove();
+        for ($i = 1; $i <= $this->getConfiguration('nbzone'); $i++){
+            if($this->getConfiguration('nomzone'.$i) === ''){
+                    $this->setConfiguration('nomzone'.$i, 'Zone '.$i);
             }
 
-            if ($zone){
-                $zone->remove();
+            if($this->getConfiguration('duree'.$i) === ''){
+                $this->setConfiguration('duree'.$i, 0);
             }
+        }
 
-            if ($getzonelancer){
-                $getzonelancer->remove();
-            }
+        if ($this->getConfiguration('dureetestzone') === ''){
+            $this->setConfiguration('dureetestzone', 2);
         }
 
         if ($this->getConfiguration('nbzone') < "5"){
@@ -197,7 +195,7 @@ class RainBird extends eqLogic {
 
         if ($this->getConfiguration('nbzone') > "4" && $this->getConfiguration('nbzone') < "9"){
             $this->setDisplay("width","632px");
-            $this->setDisplay("height","350px");
+            $this->setDisplay("height","370px");
         }
     }
 
@@ -207,17 +205,6 @@ class RainBird extends eqLogic {
      * @throws Exception
      */
     public function postSave() {
-        $refresh = $this->getCmd(null, 'refresh');
-        if (!is_object($refresh)) {
-            $refresh = new RainBirdCmd();
-            $refresh->setName(__('Rafraichir', __FILE__));
-        }
-        $refresh->setEqLogic_id($this->getId());
-        $refresh->setLogicalId('refresh');
-        $refresh->setType('action');
-        $refresh->setSubType('other');
-        $refresh->save();
-
         $daterainbird = $this->getCmd(null, 'daterainbird');
         if (!is_object($daterainbird)) {
             $daterainbird = new RainBirdCmd();
@@ -258,7 +245,7 @@ class RainBird extends eqLogic {
         if (!is_object($setraindelay)) {
             $setraindelay = new RainBirdCmd();
         }
-        $setraindelay->setName(__('Stop Irrigation sur un nombre de jours', __FILE__));
+        $setraindelay->setName(__('Retarder l\'arrosage', __FILE__));
         $setraindelay->setLogicalId('setraindelay');
         $setraindelay->setEqLogic_id($this->getId());
         $setraindelay->setType('action');
@@ -310,8 +297,6 @@ class RainBird extends eqLogic {
                 $return['state'] = 'nok';
             } elseif (exec(system::getCmdSudo() . 'pip3 list | grep -E "setuptools|pycryptodomex|requests|datetime" | wc -l') < 3) {
                 $return['state'] = 'nok';
-//            } elseif (!file_exists(__DIR__.'/../../resources/roomba/roomba.py')) {
-//                $return['state'] = 'nok';
             } else {
                 $return['state'] = 'ok';
             }
@@ -339,10 +324,6 @@ class RainBird extends eqLogic {
               return $replace;
           }
           $_version = jeedom::versionAlias($_version);
-
-          // Refresh
-          $refresh = $this->getCmd(null, 'refresh');
-          $replace['#refresh#'] = $refresh->getId();
 
           // Date du Rainbird
           $daterainbird = $this->getCmd(null, 'daterainbird');
@@ -375,6 +356,9 @@ class RainBird extends eqLogic {
           for ($i = 1; $i <= $this->getConfiguration('nbzone'); $i++){
               $gettimezone = $this->getConfiguration('duree'.$i);
               $replace['#duree'.$i.'#'] = $gettimezone;
+
+              $getnomzone = $this->getConfiguration('nomzone'.$i);
+              $replace['#nomzone'.$i.'#'] = $getnomzone;
 
               $getzone = $this->getCmd(null, 'zone'.$i);
               $replace['#zone'.$i.'#'] = $getzone->getLogicalId();
@@ -440,7 +424,7 @@ class RainBirdCmd extends cmd {
             $apirainbird = new ApiRainBird($eqLogic->getConfiguration('iprainbird'), $eqLogic->getConfiguration('mdprainbird'));
 
             if ($apirainbird->get_current_date()[0] == 'None'){
-                throw new Exception(__('Vérifier votre login et mot de passe', __FILE__));
+                throw new Exception(__('Vérifier votre login et mot de passe ou l\'application RainBird lancé sur votre Téléphone', __FILE__));
             }
 
             for ($i = 1; $i <= $eqLogic->getConfiguration('nbzone'); $i++){
@@ -450,7 +434,7 @@ class RainBirdCmd extends cmd {
                         $getintzonelancer = (int) substr($this->getLogicalId(), -2);
                     }
 
-                    $gettimezone = $eqLogic->getConfiguration('duree'.$i.'');
+                    $gettimezone = (int) $eqLogic->getConfiguration('duree'.$i.'');
                     if ($gettimezone !== 0){
                         $apirainbird->irrigate_zone($getintzonelancer, $gettimezone);
                     }

@@ -5,10 +5,6 @@
                 <span class="object_name">#object_name#</span>
             </a>
         </span>
-        <span class="cmd refresh pull-right cursor" data-cmd_id="#refresh#">
-            <i class="fas fa-sync"></i>
-        </span>
-        <span class="cmd cmd-widget" data-cmd_id="#refresh#" style="display:none;"></span>
     </div>
     <div id="nbzone" style="display: none">#nbzone#</div>
     <div class="row">
@@ -17,26 +13,23 @@
             <div>#daterainbird#</div>
         </div>
         <div class="col-md-3 center">
-            <div>Stop irrigation</div>
-            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#stopirrigation#" title="Play">
+            <div>Arreter toute l'irrigation</div>
+            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#stopirrigation#" title="Arreter toute l'irrigation">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
             </span>
         </div>
         <div class="col-md-3 center">
-            <div>Status</div>
-            <div>#getraindelay#</div>
+            <div>Retarder l'arrosage de #getraindelay# jours </div>
+<!--            <div></div>-->
             <div class="cmd cmd-widget" data-type="action" data-subtype="slider" data-template="button" data-cmd_id="#setraindelay#">
-                <div class="title ">
-                    <div class="cmdName">Set raindelay</div>
-                </div>
                 <div class="content-sm ">
                     <div class="input-group buttons">
                         <span class="input-group-btn" style="position: relative;">
                             <a class="btn btn-default btn-sm bt_minus roundedLeft"><i class="fas fa-minus"></i></a>
                         </span>
-                        <input type="text" class="input-sm in_value form-control" value="#getraindelay#" disabled="">
+                        <input type="text" class="input-sm in_value form-control text-center" value="#getraindelay#" disabled="">
                         <span class="input-group-btn" style="position: relative;">
                             <a class="btn btn-default btn-sm bt_plus roundedRight"><i class="fa fa-plus"></i></a>
                         </span>
@@ -73,99 +66,97 @@
         </div>
         <div class="col-md-3 center">
             <div>Tester toutes les zones</div>
-            <div>#getdureetestzone# min</div>
-            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonetest#" title="Play">
+            <div>#getdureetestzone# minutes</div>
+            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonetest#" title="Lancer l'irrigation pour toutes les zones">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
             </span>
         </div>
     </div>
-    <div id="zone"></div>
-    <div class="row">
+    <div class="row" style="margin-top: 10px">
         <div class="col-md-3 center zone1" id="#zone1#">
-            <div>Zone 1</div>
+            <div>#nomzone1#</div>
             <div id="getzonelancer1">#getzonelancer1#</div>
-            <div><span id="duree1">#duree1#:00</span> minutes</div>
-            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer1#" title="Play">
+            <div id="duree1">#duree1# minutes</div>
+            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer1#" title="Lancer l'irrigation pour la Zone 1">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
             </span>
         </div>
         <div class="col-md-3 center zone2" id="#zone2#">
-            <div>Zone 2</div>
+            <div>#nomzone2#</div>
             <div id="getzonelancer2">#getzonelancer2#</div>
-            <div><span id="duree2">#duree2#:00</span> minutes</div>
-            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer2#" title="Play">
+            <div id="duree2">#duree2# minutes</div>
+            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer2#" title="Lancer l'irrigation pour la Zone 2">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
             </span>
         </div>
         <div class="col-md-3 center zone3" id="#zone3#">
-            <div>Zone 3</div>
+            <div>#nomzone3#</div>
             <div id="getzonelancer3">#getzonelancer3#</div>
-            <div><span id="duree3">#duree3#:00</span> minutes</div>
-            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer3#" title="Play">
+            <div id="duree3">#duree3# minutes</div>
+            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer3#" title="Lancer l'irrigation pour la Zone 3">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
             </span>
         </div>
         <div class="col-md-3 center zone4" id="#zone4#">
-            <div>Zone 4</div>
+            <div>#nomzone4#</div>
             <div id="getzonelancer4">#getzonelancer4#</div>
-            <div><span id="duree4">#duree4#:00</span> minutes</div>
-            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer4#" title="Play">
+            <div id="duree4">#duree4# minutes</div>
+            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer4#" title="Lancer l'irrigation pour la Zone 4">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
             </span>
         </div>
     </div>
-    <div class="row">
+    <div class="row" style="margin-top: 10px">
         <div class="col-md-3 center zone5" id="#zone5#">
-            <div>Zone 5</div>
+            <div>#nomzone5#</div>
             <div id="getzonelancer5">#getzonelancer5#</div>
-            <div><span id="duree5">#duree5#:00</span> minutes</div>
-            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer5#" title="Play">
+            <div id="duree5">#duree5# minutes</div>
+            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer5#" title="Lancer l'irrigation pour la Zone 5">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
             </span>
         </div>
         <div class="col-md-3 center zone6" id="#zone6#">
-            <div>Zone 6</div>
+            <div>#nomzone6#</div>
             <div id="getzonelancer6">#getzonelancer6#</div>
-            <div><span id="duree6">#duree6#:00</span> minutes</div>
-            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer6#" title="Play">
+            <div id="duree6">#duree6# minutes</div>
+            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer6#" title="Lancer l'irrigation pour la Zone 6">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
             </span>
         </div>
         <div class="col-md-3 center zone7" id="#zone7#">
-            <div>Zone 7</div>
+            <div>#nomzone7#</div>
             <div id="getzonelancer7">#getzonelancer7#</div>
-            <div><span id="duree7">#duree7#:00</span> minutes</div>
-            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer7#" title="Play">
+            <div id="duree7">#duree7# minutes</div>
+            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer7#" title="Lancer l'irrigation pour la Zone 7">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
             </span>
         </div>
         <div class="col-md-3 center zone8" id="#zone8#">
-            <div>Zone 8</div>
+            <div>#nomzone8#</div>
             <div id="getzonelancer8">#getzonelancer8#</div>
-            <div><span id="duree8">#duree8#:00</span> minutes</div>
-            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer8#" title="Play">
+            <div id="duree8">#duree8# minutes</div>
+            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer8#" title="Lancer l'irrigation pour la Zone 8">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
             </span>
         </div>
-        <div id="counter"></div>
     </div>
     <script>
         $(document).ready(
@@ -194,86 +185,40 @@
             jeedom.cmd.execute({id: '#zonetest#'});
         });
 
-        $('.cmd[data-cmd_id=#refresh#]').on('click', function () {
-            jeedom.cmd.execute({id: '#refresh#'});
-        });
-
         $('.cmd[data-cmd_id=#stopirrigation#]').on('click', function () {
             jeedom.cmd.execute({id: '#stopirrigation#'});
         });
 
         $('.cmd[data-cmd_id=#zonelancer1#]').on('click', function () {
             jeedom.cmd.execute({id: '#zonelancer1#'});
-            let fiveMinutes = 60 * parseInt('#duree1#');
-            let display = document.querySelector('#duree1');
-            startTimer(fiveMinutes,display);
         });
 
         $('.cmd[data-cmd_id=#zonelancer2#]').on('click', function () {
             jeedom.cmd.execute({id: '#zonelancer2#'});
-            let fiveMinutes = 60 * parseInt('#duree2#');
-            let display = document.querySelector('#duree2');
-            startTimer(fiveMinutes,display);
-
         });
 
         $('.cmd[data-cmd_id=#zonelancer3#]').on('click', function () {
             jeedom.cmd.execute({id: '#zonelancer3#'});
-            let fiveMinutes = 60 * parseInt('#duree3#');
-            let display = document.querySelector('#duree3');
-            startTimer(fiveMinutes,display);
         });
 
         $('.cmd[data-cmd_id=#zonelancer4#]').on('click', function () {
             jeedom.cmd.execute({id: '#zonelancer4#'});
-            let fiveMinutes = 60 * parseInt('#duree4#');
-            let display = document.querySelector('#duree4');
-            startTimer(fiveMinutes,display);
         });
 
         $('.cmd[data-cmd_id=#zonelancer5#]').on('click', function () {
             jeedom.cmd.execute({id: '#zonelancer5#'});
-            let fiveMinutes = 60 * parseInt('#duree5#');
-            let display = document.querySelector('#duree5');
-            startTimer(fiveMinutes,display);
         });
 
         $('.cmd[data-cmd_id=#zonelancer6#]').on('click', function () {
             jeedom.cmd.execute({id: '#zonelancer6#'});
-            let fiveMinutes = 60 * parseInt('#duree6#');
-            let display = document.querySelector('#duree6');
-            startTimer(fiveMinutes,display);
         });
 
         $('.cmd[data-cmd_id=#zonelancer7#]').on('click', function () {
             jeedom.cmd.execute({id: '#zonelancer7#'});
-            let fiveMinutes = 60 * parseInt('#duree7#');
-            let display = document.querySelector('#duree7');
-            startTimer(fiveMinutes,display);
         });
 
         $('.cmd[data-cmd_id=#zonelancer8#]').on('click', function () {
             jeedom.cmd.execute({id: '#zonelancer8#'});
-            let fiveMinutes = 60 * parseInt('#duree8#');
-            let display = document.querySelector('#duree8');
-            startTimer(fiveMinutes,display);
         });
-
-        function startTimer(duration, display) {
-            let timer = duration, minutes, seconds;
-            setInterval(function () {
-                minutes = parseInt(timer / 60, 10);
-                seconds = parseInt(timer % 60, 10);
-
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
-
-                display.textContent = minutes + ":" + seconds;
-
-                if (--timer < 0) {
-                    timer = duration;
-                }
-            }, 1000);
-        }
     </script>
 </div>

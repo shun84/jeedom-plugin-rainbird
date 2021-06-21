@@ -53,7 +53,7 @@ class ApiRainBird
      * @return mixed
      */
     public function irrigate_zone(int $zone, $timer){
-        $cmd = 'cd ' . $this->getResourcePath() . ' && python3 irrigate_zone.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '" "'.$zone.'" "'.$timer.'"';
+        $cmd = 'cd ' . $this->getResourcePath() . ' && python3 irrigate_zone.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '" '.$zone.' '.$timer.'';
         exec($cmd . ' 2>&1', $output);
 
         return $output;

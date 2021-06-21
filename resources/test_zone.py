@@ -20,7 +20,7 @@ if len(sys.argv) < 4:
 
 ip = sys.argv[1]
 password = sys.argv[2]
-zone = sys.argv[3]
+timer = sys.argv[3]
 
 controller = RainbirdController(ip, password)
-controller.test_zone(int(zone))
+controller.test_zone(int(timer))

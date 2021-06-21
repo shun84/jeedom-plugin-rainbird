@@ -1,11 +1,32 @@
-# Template de plugin pour Jeedom
+![icon du site RainBird](https://camo.githubusercontent.com/7bfadb412f350a026aa329f71cb895697e7727f63d8b636bdc62ca8b9742282c/687474703a2f2f69717765622e7261696e626972642e636f6d2f69712f696d616765732f6c6f676f732f7261696e626972642e706e67)
 
-Ce "template de plugin" sert de base à la réalisation de plugins pour **Jeedom**.
+Il y a aucune affiliation avec l'entreprise Rainbird.
+J'utilise l'**API Python** sur le lien suivant : https://github.com/jbarrancos/pyrainbird
 
-La documentation générale relative à la conception de plugin est consultable [ici](https://doc.jeedom.com/fr_FR/dev/). Dans le détail :   
-* [Utilisation du template de plugin](https://doc.jeedom.com/fr_FR/dev/plugin_template) : Le template de plugin est une base de plugin pour Jeedom qui doit être adaptée avec l'id de votre plugin et à laquelle il suffit d'ajouter vos propres fonctions. 
-* [Fichier info.json](https://doc.jeedom.com/fr_FR/dev/structure_info_json) : Intégré depuis la version 3.0 de Jeedom, le fichier **info.json** est obligatoire pour le bon fonctionnement des plugins et leur bon déploiement sur le Market Jeedom.
-* [Icône du plugin](https://doc.jeedom.com/fr_FR/dev/Icone_de_plugin) : Afin de pouvoir être publié sur le Market Jeedom, tout plugin doit disposer d’une icône. Attention à ne pas utiliser le même code couleur que les icônes des plugins Jeedom officiels.
-* [Widget du plugin](https://doc.jeedom.com/fr_FR/dev/widget_plugin) : Présentation des différentes manières d'inclure des widgets personnalisés au plugin.
-* [Documentation du plugin](https://doc.jeedom.com/fr_FR/dev/documentation_plugin) : Présentation de la mise en place d'une documentation car un bon plugin n'est rien sans documentation adéquate.
-* [Publication du plugin](https://doc.jeedom.com/fr_FR/dev/publication_plugin) : Description des pré-requis indispensables à la publication du plugin.
+# jeedom-plugin-rainbird
+
+Plugin qui permet de gerer votre irrigation avec la solution Rainbird avec Jeedom systeme de domotique.
+
+Il vous faut a tout prit le **WIFI Link** : https://wifi.rainbird.com/
+
+# installation
+Installation depuis Github :
+
+> cd /var/www/html/plugins  # ou autre suivant l'installation de votre Jeedom
+> git clone https://github.com/shun84/jeedom-plugin-rainbird.git RainBird
+
+
+# Avant la configuration du plugin
+Il faut récupérer l'adresse **IP** et le **Mot de passe** utilisé pour aller dans la configuration sur votre application **Rainbird**.
+
+**TRES IMPORTANT : il faut juste déprogrammer vos arrossages sur l'application RainBird et que l'application Mobile ne soit pas lancé sinon il va y avoir un conflit avec l'utilisation sur Jeedom**
+
+# Configuration du plugin
+
+Après avoir activé le plugin, vérifier que les dépendences sont ok, si c'est pas le cas les installer.
+
+Puis créer votre objet avec l'adresse **IP** et le **Mot de passe** et sélectionner le nombre de zones que vous avez et sauvegarder.
+
+Rendez-vous sur l'onglet **Configuration des zones** pour saisir la durée pour chaque zone et le nom si besoin.
+
+Actuellement pour programmer vos arrosages, c'est d'utiliser pour l'instant par **Scénario**.

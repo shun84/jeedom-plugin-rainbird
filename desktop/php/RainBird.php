@@ -65,7 +65,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 		<ul class="nav nav-tabs" role="tablist">
 			<li role="presentation"><a href="#" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fas fa-arrow-circle-left"></i></a></li>
 			<li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt"></i><span class="hidden-xs"> {{Équipement}}</span></a></li>
-			<li role="presentation"><a href="#duree" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-hourglass"></i><span class="hidden-xs"> {{Durée}}</span></a></li>
+			<li role="presentation"><a href="#configurationzones" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-cogs"></i><span class="hidden-xs"> {{Configuration des Zones}}</span></a></li>
 			<li role="presentation"><a href="#commandtab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-list"></i><span class="hidden-xs"> {{Commandes}}</span></a></li>
 		</ul>
 		<div class="tab-content">
@@ -139,7 +139,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <select id="nbzone" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="nbzone">
                                         <option></option>
                                         <?php
-                                            for ($i = 1; $i <= 16; $i++) {
+                                            for ($i = 1; $i <= 8; $i++) {
                                                 echo '<option value="'.$i.'">Zone '.$i.'</option>';
                                             }
                                         ?>
@@ -164,23 +164,45 @@ $eqLogics = eqLogic::byType($plugin->getId());
 			</div><!-- /.tabpanel #eqlogictab-->
 
             <!-- Onglet pour la durée de l'arrosage des zones -->
-            <div role="tabpanel" class="tab-pane" id="duree">
+            <div role="tabpanel" class="tab-pane" id="configurationzones">
                 <form class="form-horizontal">
                     <fieldset>
-                        <div class="form-group row">
-                            <?php
-                                for ($i = 1; $i <= $eqLogics[0]->getConfiguration('nbzone'); $i++){
-                                    echo '<label for="duree'.$i.'" class="col-2 col-form-label">Zone '.$i.'</label>';
-                                    echo '<div class="col-10">';
-                                    echo '<input type="number" class="eqLogicAttr form-control"  id="duree'.$i.'" data-l1key="configuration" data-l2key="duree'.$i.'">';
-                                    echo '</div>';
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <legend><i class="fas fa-hourglass-half"></i>{{Durée des zones}}</legend>
+                                    <?php
+                                    if ($eqLogics){
+                                        for ($i = 1; $i <= $eqLogics[0]->getConfiguration('nbzone'); $i++){
+                                            echo '<div class="form-group">';
+                                            echo '<label for="duree'.$i.'" class="col-sm-3 control-label">Zone '.$i.'</label>';
+                                            echo '<div class="col-sm-7">';
+                                            echo '<input type="number" class="eqLogicAttr form-control"  id="duree'.$i.'" data-l1key="configuration" data-l2key="duree'.$i.'">';
+                                            echo '</div>';
+                                            echo '</div>';
+                                        }
+                                    }
+                                    ?>
+                                <div class="form-group">
+                                    <label for="dureetestzone" class="col-sm-3 control-label">{{Tout les zones}}</label>
+                                    <div class="col-sm-7">
+                                        <input type="number" class="eqLogicAttr form-control"  id="dureetestzone" data-l1key="configuration" data-l2key="dureetestzone">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <legend><i class="fas fa-ellipsis-v"></i>{{Nom des zones}}</legend>
+                                <?php
+                                if ($eqLogics) {
+                                    for ($i = 1; $i <= $eqLogics[0]->getConfiguration('nbzone'); $i++) {
+                                        echo '<div class="form-group">';
+                                        echo '<label for="nomzone' . $i . '" class="col-sm-3 control-label">Nom de la Zone ' . $i . '</label>';
+                                        echo '<div class="col-sm-7">';
+                                        echo '<input type="text" class="eqLogicAttr form-control"  id="nomzone' . $i . '" data-l1key="configuration" data-l2key="nomzone' . $i . '">';
+                                        echo '</div>';
+                                        echo '</div>';
+                                    }
                                 }
-                            ?>
-                        </div>
-                        <div class="form-group row">
-                            <label for="dureetestzone" class="col-2 col-form-label">Durée test tout les zones</label>
-                            <div class="col-10">
-                                <input type="number" class="eqLogicAttr form-control"  id="dureetestzone" data-l1key="configuration" data-l2key="dureetestzone">
+                                ?>
                             </div>
                         </div>
                     </fieldset>
