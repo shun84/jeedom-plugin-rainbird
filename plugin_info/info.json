@@ -1,18 +1,8 @@
 {
 	"id" : "RainBird",
 	"name" : "Rain Bird",
-	 "specialAttributes" : {
-	    "object" : {
-	      "toto" : {"name" : {"fr_FR" : "Plop je suis un attribut spécial"},"type" : "input"},
-	      "toto2" : {"name" : {"fr_FR" : "Plop je suis un attribut spécial number"},"type" : "number"}
-	    },
-	    "user" : {
-	      "toto" : {"name" : {"fr_FR" : "Plop je suis un attribut spécial"},"type" : "select","values" : [{"value" : "1", "name" : "valeur 1"},{"value" : "plop", "name" : "valeur plop"}]}
-	    }
-	  },
 	"description" : {
-		"fr_FR": "Plugin pour récupérer les informations pour l'arrosage avec le boitier Rain Bird",
-		"en_US": "Template plugin"
+		"fr_FR": "Plugin pour récupérer les informations pour l'arrosage avec le boitier Rain Bird"
 	},
 	"licence" : "AGPL",
 	"author" : "Shun84",
@@ -23,10 +13,6 @@
 	"maxDependancyInstallTime" : 0,
 	"changelog" : "https://jeedom.github.io/plugin-template/#language#/changelog",
 	"documentation" : "https://jeedom.github.io/plugin-template/#language#/",
-	"link" : {
-		"forum":"Lien vers le forum",
-		"video" : "Lien vers une video"
-	},
-	"language" : ["fr_FR","en_US","de_DE","sp_SP"],
+	"language" : ["fr_FR"],
 	"compatibility" : ["miniplus","smart","rpi","docker","diy","mobile","v4"]
 }

@@ -1,11 +1,16 @@
 #!/bin/bash
 
-PROGRESS_FILE=/tmp/jeedom/rainbird/dependance
+PROGRESS_FILE=/tmp/jeedom/RainBird/dependency
+
+if [ ! -z $1 ]; then
+    PROGRESS_FILE=$1
+fi
 touch ${PROGRESS_FILE}
 echo 0 > ${PROGRESS_FILE}
-echo "********************************************************"
-echo "*             Installation des dépendances             *"
-echo "********************************************************"
+echo "*************************************"
+echo "*   Launch install of dependencies  *"
+echo "*************************************"
+echo $(date)
 
 BASEDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
@@ -45,8 +50,10 @@ pip_install requests
 echo 72 > ${PROGRESS_FILE}
 pip_install datetime
 echo 84 > ${PROGRESS_FILE}
+
 echo 100 > ${PROGRESS_FILE}
-echo "********************************************************"
-echo "*             Installation terminée                    *"
-echo "********************************************************"
+echo $(date)
+echo "***************************"
+echo "*      Install ended      *"
+echo "***************************"
 rm ${PROGRESS_FILE}

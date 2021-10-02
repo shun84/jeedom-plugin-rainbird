@@ -9,20 +9,19 @@
     <div id="nbzone" style="display: none">#nbzone#</div>
     <div class="row">
         <div class="col-md-3 center">
-            <div>Date</div>
-            <div>#daterainbird#</div>
+            <div>Date et Heure</div>
+            <div>#daterainbird# #timerainbird#</div>
         </div>
         <div class="col-md-3 center">
             <div>Arreter toute l'irrigation</div>
-            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#stopirrigation#" title="Arreter toute l'irrigation">
+            <span id="cmd_#stopirrigation#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#stopirrigation#" title="Arreter toute l'irrigation">
                   <a class="btn btn-sm btn-default action">
-                      <i class="fas fa-play"></i>
+                      <i class="fas fa-stop"></i>
                   </a>
             </span>
         </div>
         <div class="col-md-3 center">
             <div>Retarder l'arrosage de #getraindelay# jours </div>
-<!--            <div></div>-->
             <div class="cmd cmd-widget" data-type="action" data-subtype="slider" data-template="button" data-cmd_id="#setraindelay#">
                 <div class="content-sm ">
                     <div class="input-group buttons">
@@ -67,7 +66,7 @@
         <div class="col-md-3 center">
             <div>Tester toutes les zones</div>
             <div>#getdureetestzone# minutes</div>
-            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonetest#" title="Lancer l'irrigation pour toutes les zones">
+            <span id="cmd_#zonetest#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonetest#" title="Lancer l'irrigation pour toutes les zones">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
@@ -79,7 +78,12 @@
             <div>#nomzone1#</div>
             <div id="getzonelancer1">#getzonelancer1#</div>
             <div id="duree1">#duree1# minutes</div>
-            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer1#" title="Lancer l'irrigation pour la Zone 1">
+            <span id="cmd_#zonestop1#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop1#" title="Stop l'irrigation pour la Zone 1">
+                  <a class="btn btn-sm btn-default action">
+                      <i class="fas fa-stop"></i>
+                  </a>
+            </span>
+            <span id="cmd_#zonelancer1#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer1#" title="Lancer l'irrigation pour la Zone 1">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
@@ -89,7 +93,12 @@
             <div>#nomzone2#</div>
             <div id="getzonelancer2">#getzonelancer2#</div>
             <div id="duree2">#duree2# minutes</div>
-            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer2#" title="Lancer l'irrigation pour la Zone 2">
+            <span id="cmd_#zonestop2#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop2#" title="Stop l'irrigation pour la Zone 2">
+                  <a class="btn btn-sm btn-default action">
+                      <i class="fas fa-stop"></i>
+                  </a>
+            </span>
+            <span id="cmd_#zonelancer2#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer2#" title="Lancer l'irrigation pour la Zone 2">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
@@ -99,7 +108,12 @@
             <div>#nomzone3#</div>
             <div id="getzonelancer3">#getzonelancer3#</div>
             <div id="duree3">#duree3# minutes</div>
-            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer3#" title="Lancer l'irrigation pour la Zone 3">
+            <span id="cmd_#zonestop3#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop3#" title="Stop l'irrigation pour la Zone 3">
+                  <a class="btn btn-sm btn-default action">
+                      <i class="fas fa-stop"></i>
+                  </a>
+            </span>
+            <span id="cmd_#zonelancer3#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer3#" title="Lancer l'irrigation pour la Zone 3">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
@@ -109,7 +123,12 @@
             <div>#nomzone4#</div>
             <div id="getzonelancer4">#getzonelancer4#</div>
             <div id="duree4">#duree4# minutes</div>
-            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer4#" title="Lancer l'irrigation pour la Zone 4">
+            <span id="cmd_#zonestop4#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop4#" title="Stop l'irrigation pour la Zone 4">
+                  <a class="btn btn-sm btn-default action">
+                      <i class="fas fa-stop"></i>
+                  </a>
+            </span>
+            <span id="cmd_#zonelancer4#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer4#" title="Lancer l'irrigation pour la Zone 4">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
@@ -121,7 +140,12 @@
             <div>#nomzone5#</div>
             <div id="getzonelancer5">#getzonelancer5#</div>
             <div id="duree5">#duree5# minutes</div>
-            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer5#" title="Lancer l'irrigation pour la Zone 5">
+            <span id="cmd_#zonestop5#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop5#" title="Stop l'irrigation pour la Zone 5">
+                  <a class="btn btn-sm btn-default action">
+                      <i class="fas fa-stop"></i>
+                  </a>
+            </span>
+            <span id="cmd_#zonelancer5#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer5#" title="Lancer l'irrigation pour la Zone 5">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
@@ -131,7 +155,12 @@
             <div>#nomzone6#</div>
             <div id="getzonelancer6">#getzonelancer6#</div>
             <div id="duree6">#duree6# minutes</div>
-            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer6#" title="Lancer l'irrigation pour la Zone 6">
+            <span id="cmd_#zonestop6#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop6#" title="Stop l'irrigation pour la Zone 6">
+                  <a class="btn btn-sm btn-default action">
+                      <i class="fas fa-stop"></i>
+                  </a>
+            </span>
+            <span id="cmd_#zonelancer6#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer6#" title="Lancer l'irrigation pour la Zone 6">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
@@ -141,7 +170,12 @@
             <div>#nomzone7#</div>
             <div id="getzonelancer7">#getzonelancer7#</div>
             <div id="duree7">#duree7# minutes</div>
-            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer7#" title="Lancer l'irrigation pour la Zone 7">
+            <span id="cmd_#zonestop7#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop7#" title="Stop l'irrigation pour la Zone 7">
+                  <a class="btn btn-sm btn-default action">
+                      <i class="fas fa-stop"></i>
+                  </a>
+            </span>
+            <span id="cmd_#zonelancer7" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer7#" title="Lancer l'irrigation pour la Zone 7">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
@@ -151,7 +185,12 @@
             <div>#nomzone8#</div>
             <div id="getzonelancer8">#getzonelancer8#</div>
             <div id="duree8">#duree8# minutes</div>
-            <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer8#" title="Lancer l'irrigation pour la Zone 8">
+            <span id="cmd_#zonestop8#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop8#" title="Stop l'irrigation pour la Zone 8">
+                  <a class="btn btn-sm btn-default action">
+                      <i class="fas fa-stop"></i>
+                  </a>
+            </span>
+            <span id="cmd_#zonelancer8" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer8#" title="Lancer l'irrigation pour la Zone 8">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
@@ -159,66 +198,126 @@
         </div>
     </div>
     <script>
-        $(document).ready(
-            function () {
-                let nbzone = document.getElementById('nbzone').innerText;
-                for (let i = 1; i <= 16; i++){
-                    if (document.getElementById('#zone'+i+'#')){
-                        $('.zone'+i).hide();
-                    }
-                }
-
-                for (let i = 1; i <= nbzone; i++){
-                    let getzonelancer = document.getElementById('getzonelancer'+i).innerText;
-                    if (getzonelancer === '0'){
-                        document.getElementById('getzonelancer'+i).innerHTML = '<i class="fas fa-tint-slash fa-3x"></i>';
-                    }
-
-                    if (getzonelancer === '1'){
-                        document.getElementById('getzonelancer'+i).innerHTML = '<i class="fas fa-tint fa-3x"></i>';
-                    }
-                }
+        for (let i = 1; i <= document.getElementById('nbzone').innerText; i++){
+            let getzonelancer = document.getElementById('getzonelancer'+i);
+            if (getzonelancer.innerText === '0'){
+                getzonelancer.innerHTML = '<i class="fas fa-tint-slash fa-3x"></i>';
             }
-        );
 
-        $('.cmd[data-cmd_id=#zonetest#]').on('click', function () {
+            if (getzonelancer.innerText === '1'){
+                getzonelancer.innerHTML = '<i class="fas fa-tint fa-3x"></i>';
+            }
+        }
+
+        for (let i = 1; i <= 16; i++){
+            let zoneid = document.getElementById('#zone'+i+'#');
+            if (zoneid){
+                zoneid.hidden = true;
+            }
+        }
+
+        document.getElementById('cmd_#zonetest#').addEventListener('click', function () {
             jeedom.cmd.execute({id: '#zonetest#'});
         });
 
-        $('.cmd[data-cmd_id=#stopirrigation#]').on('click', function () {
+        document.getElementById('cmd_#stopirrigation#').addEventListener('click', function () {
             jeedom.cmd.execute({id: '#stopirrigation#'});
         });
 
-        $('.cmd[data-cmd_id=#zonelancer1#]').on('click', function () {
-            jeedom.cmd.execute({id: '#zonelancer1#'});
-        });
+        if (document.getElementById('cmd_#zonelancer1#')){
+            document.getElementById('cmd_#zonelancer1#').addEventListener('click', function () {
+                jeedom.cmd.execute({id: '#zonelancer1#'});
+            });
+        }
 
-        $('.cmd[data-cmd_id=#zonelancer2#]').on('click', function () {
-            jeedom.cmd.execute({id: '#zonelancer2#'});
-        });
+        if (document.getElementById('cmd_#zonelancer2#')){
+            document.getElementById('cmd_#zonelancer2#').addEventListener('click', function () {
+                jeedom.cmd.execute({id: '#zonelancer2#'});
+            });
+        }
 
-        $('.cmd[data-cmd_id=#zonelancer3#]').on('click', function () {
-            jeedom.cmd.execute({id: '#zonelancer3#'});
-        });
+        if (document.getElementById('cmd_#zonelancer3#')){
+            document.getElementById('cmd_#zonelancer3#').addEventListener('click', function () {
+                jeedom.cmd.execute({id: '#zonelancer3#'});
+            });
+        }
 
-        $('.cmd[data-cmd_id=#zonelancer4#]').on('click', function () {
-            jeedom.cmd.execute({id: '#zonelancer4#'});
-        });
+        if (document.getElementById('cmd_#zonelancer4#')){
+            document.getElementById('cmd_#zonelancer4#').addEventListener('click', function () {
+                jeedom.cmd.execute({id: '#zonelancer4#'});
+            });
+        }
 
-        $('.cmd[data-cmd_id=#zonelancer5#]').on('click', function () {
-            jeedom.cmd.execute({id: '#zonelancer5#'});
-        });
+        if (document.getElementById('cmd_#zonelancer5#')){
+            document.getElementById('cmd_#zonelancer5#').addEventListener('click', function () {
+                jeedom.cmd.execute({id: '#zonelancer5#'});
+            });
+        }
 
-        $('.cmd[data-cmd_id=#zonelancer6#]').on('click', function () {
-            jeedom.cmd.execute({id: '#zonelancer6#'});
-        });
+        if (document.getElementById('cmd_#zonelancer6#')){
+            document.getElementById('cmd_#zonelancer6#').addEventListener('click', function () {
+                jeedom.cmd.execute({id: '#zonelancer6#'});
+            });
+        }
 
-        $('.cmd[data-cmd_id=#zonelancer7#]').on('click', function () {
-            jeedom.cmd.execute({id: '#zonelancer7#'});
-        });
+        if (document.getElementById('cmd_#zonelancer7#')){
+            document.getElementById('cmd_#zonelancer7#').addEventListener('click', function () {
+                jeedom.cmd.execute({id: '#zonelancer7#'});
+            });
+        }
 
-        $('.cmd[data-cmd_id=#zonelancer8#]').on('click', function () {
-            jeedom.cmd.execute({id: '#zonelancer8#'});
-        });
+        if (document.getElementById('cmd_#zonelancer8#')){
+            document.getElementById('cmd_#zonelancer8#').addEventListener('click', function () {
+                jeedom.cmd.execute({id: '#zonelancer8#'});
+            });
+        }
+
+        if (document.getElementById('cmd_#zonestop1#')){
+            document.getElementById('cmd_#zonestop1#').addEventListener('click', function () {
+                jeedom.cmd.execute({id: '#zonestop1#'});
+            });
+        }
+
+        if (document.getElementById('cmd_#zonestop2#')){
+            document.getElementById('cmd_#zonestop2#').addEventListener('click', function () {
+                jeedom.cmd.execute({id: '#zonestop2#'});
+            });
+        }
+
+        if (document.getElementById('cmd_#zonestop3#')){
+            document.getElementById('cmd_#zonestop3#').addEventListener('click', function () {
+                jeedom.cmd.execute({id: '#zonestop3#'});
+            });
+        }
+
+        if (document.getElementById('cmd_#zonestop4#')){
+            document.getElementById('cmd_#zonestop4#').addEventListener('click', function () {
+                jeedom.cmd.execute({id: '#zonestop4#'});
+            });
+        }
+
+        if (document.getElementById('cmd_#zonestop5#')){
+            document.getElementById('cmd_#zonestop5#').addEventListener('click', function () {
+                jeedom.cmd.execute({id: '#zonestop5#'});
+            });
+        }
+
+        if (document.getElementById('cmd_#zonestop6#')){
+            document.getElementById('cmd_#zonestop6#').addEventListener('click', function () {
+                jeedom.cmd.execute({id: '#zonestop6#'});
+            });
+        }
+
+        if (document.getElementById('cmd_#zonestop7#')){
+            document.getElementById('cmd_#zonestop7#').addEventListener('click', function () {
+                jeedom.cmd.execute({id: '#zonestop7#'});
+            });
+        }
+
+        if (document.getElementById('cmd_#zonestop8#')){
+            document.getElementById('cmd_#zonestop8#').addEventListener('click', function () {
+                jeedom.cmd.execute({id: '#zonestop8#'});
+            });
+        }
     </script>
 </div>
