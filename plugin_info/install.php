@@ -19,16 +19,16 @@
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 // Fonction exécutée automatiquement après l'installation du plugin
-  function RainBird_install() {
+  function rainbird_install() {
 
   }
 
 // Fonction exécutée automatiquement après la mise à jour du plugin
-  function RainBird_update() {
+  function rainbird_update() {
 
   }
 
 // Fonction exécutée automatiquement après la suppression du plugin
-  function RainBird_remove() {
+  function rainbird_remove() {
 
   }

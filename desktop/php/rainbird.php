@@ -2,17 +2,14 @@
 if (!isConnect('admin')) {
 	throw new Exception('{{401 - Accès non autorisé}}');
 }
-// Déclaration des variables obligatoires
-$plugin = plugin::byId('RainBird');
+$plugin = plugin::byId('rainbird');
 sendVarToJS('eqType', $plugin->getId());
 $eqLogics = eqLogic::byType($plugin->getId());
 ?>
 
 <div class="row row-overflow">
-	<!-- Page d'accueil du plugin -->
 	<div class="col-xs-12 eqLogicThumbnailDisplay">
 		<legend><i class="fas fa-cog"></i>  {{Gestion}}</legend>
-		<!-- Boutons de gestion du plugin -->
 		<div class="eqLogicThumbnailContainer">
 			<div class="cursor eqLogicAction logoPrimary" data-action="add">
 				<i class="fas fa-plus-circle"></i>
@@ -25,35 +22,36 @@ $eqLogics = eqLogic::byType($plugin->getId());
 				<span>{{Configuration}}</span>
 			</div>
 		</div>
-		<legend><i class="fas fa-table"></i> {{Mes templates}}</legend>
-		<!-- Champ de recherche -->
-		<div class="input-group" style="margin:5px;">
-			<input class="form-control roundedLeft" placeholder="{{Rechercher}}" id="in_searchEqlogic"/>
-			<div class="input-group-btn">
-				<a id="bt_resetSearch" class="btn roundedRight" style="width:30px"><i class="fas fa-times"></i></a>
-			</div>
-		</div>
-		<!-- Liste des équipements du plugin -->
-		<div class="eqLogicThumbnailContainer">
-			<?php
-			foreach ($eqLogics as $eqLogic) {
-				$opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
-				echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
-				echo '<img src="' . $plugin->getPathImgIcon() . '"/>';
-				echo '<br>';
-				echo '<span class="name">' . $eqLogic->getHumanName(true, true) . '</span>';
-				echo '</div>';
-			}
-			?>
-		</div>
-	</div> <!-- /.eqLogicThumbnailDisplay -->
-
-	<!-- Page de présentation de l'équipement -->
+		<legend><i class="fas fa-table"></i> {{Mes RainBird}}</legend>
+        <?php
+        if (count($eqLogics) == 0) {
+            echo '<br/><div class="text-center" style="font-size:1.2em;font-weight:bold;">{{Aucun équipement Rainbird n\'est paramétré, cliquer sur "Ajouter" pour commencer}}</div>';
+        } else {
+            // Champ de recherche
+            echo '<div class="input-group" style="margin:5px;">';
+            echo '<input class="form-control roundedLeft" placeholder="{{Rechercher}}" id="in_searchEqlogic"/>';
+            echo '<div class="input-group-btn">';
+            echo '<a id="bt_resetSearch" class="btn" style="width:30px"><i class="fas fa-times"></i></a>';
+            echo '<a class="btn roundedRight hidden" id="bt_pluginDisplayAsTable" data-coreSupport="1" data-state="0"><i class="fas fa-grip-lines"></i></a>';
+            echo '</div>';
+            echo '</div>';
+            // Liste des équipements du plugin
+            echo '<div class="eqLogicThumbnailContainer">';
+            foreach ($eqLogics as $eqLogic) {
+                $opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
+                echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
+                echo '<img src="' . $plugin->getPathImgIcon() . '"/>';
+                echo '<br>';
+                echo '<span class="name">' . $eqLogic->getHumanName(true, true) . '</span>';
+                echo '</div>';
+            }
+            echo '</div>';
+        }
+        ?>
+	</div>
 	<div class="col-xs-12 eqLogic" style="display: none;">
-		<!-- barre de gestion de l'équipement -->
 		<div class="input-group pull-right" style="display:inline-flex;">
 			<span class="input-group-btn">
-				<!-- Les balises <a></a> sont volontairement fermées à la ligne suivante pour éviter les espaces entre les boutons. Ne pas modifier -->
 				<a class="btn btn-sm btn-default eqLogicAction roundedLeft" data-action="configure"><i class="fas fa-cogs"></i><span class="hidden-xs"> {{Configuration avancée}}</span>
 				</a><a class="btn btn-sm btn-default eqLogicAction" data-action="copy"><i class="fas fa-copy"></i><span class="hidden-xs">  {{Dupliquer}}</span>
 				</a><a class="btn btn-sm btn-success eqLogicAction" data-action="save"><i class="fas fa-check-circle"></i> {{Sauvegarder}}
@@ -69,10 +67,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 			<li role="presentation"><a href="#commandtab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-list"></i><span class="hidden-xs"> {{Commandes}}</span></a></li>
 		</ul>
 		<div class="tab-content">
-			<!-- Onglet de configuration de l'équipement -->
 			<div role="tabpanel" class="tab-pane active" id="eqlogictab">
-				<!-- Partie gauche de l'onglet "Equipements" -->
-				<!-- Paramètres généraux de l'équipement -->
 				<form class="form-horizontal">
 					<fieldset>
 						<div class="col-lg-7">
@@ -119,7 +114,6 @@ $eqLogics = eqLogic::byType($plugin->getId());
 								</div>
 							</div>
 							<br>
-
 							<legend><i class="fas fa-cogs"></i> {{Paramètres}}</legend>
 							<div class="form-group">
 								<label for="iprainbird" class="col-sm-3 control-label">{{Ip du RainBird}}</label>
@@ -147,9 +141,6 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 </div>
                             </div>
 						</div>
-
-						<!-- Partie droite de l'onglet "Équipement" -->
-						<!-- Affiche l'icône du plugin par défaut mais vous pouvez y afficher les informations de votre choix -->
 						<div class="col-lg-5">
 							<legend><i class="fas fa-info"></i> {{Informations}}</legend>
 							<div class="form-group">
@@ -161,9 +152,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 					</fieldset>
 				</form>
 				<hr>
-			</div><!-- /.tabpanel #eqlogictab-->
-
-            <!-- Onglet pour la durée de l'arrosage des zones -->
+			</div>
             <div role="tabpanel" class="tab-pane" id="configurationzones">
                 <form class="form-horizontal">
                     <fieldset>
@@ -207,9 +196,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                         </div>
                     </fieldset>
                 </form>
-            </div><!-- /.tabpanel #duree-->
-
-			<!-- Onglet des commandes de l'équipement -->
+            </div>
 			<div role="tabpanel" class="tab-pane" id="commandtab">
 				<a class="btn btn-default btn-sm pull-right cmdAction" data-action="add" style="margin-top:5px;"><i class="fas fa-plus-circle"></i> {{Ajouter une commande}}</a>
 				<br/><br/>
@@ -229,13 +216,11 @@ $eqLogics = eqLogic::byType($plugin->getId());
 						</tbody>
 					</table>
 				</div>
-			</div><!-- /.tabpanel #commandtab-->
+			</div>
 
-		</div><!-- /.tab-content -->
-	</div><!-- /.eqLogic -->
-</div><!-- /.row row-overflow -->
+		</div>
+	</div>
+</div>
 
-<!-- Inclusion du fichier javascript du plugin (dossier, nom_du_fichier, extension_du_fichier, id_du_plugin) -->
-<?php include_file('desktop', 'RainBird', 'js', 'RainBird');?>
-<!-- Inclusion du fichier javascript du core - NE PAS MODIFIER NI SUPPRIMER -->
+<?php include_file('desktop', 'rainbird', 'js', 'rainbird');?>
 <?php include_file('core', 'plugin.template', 'js');?>

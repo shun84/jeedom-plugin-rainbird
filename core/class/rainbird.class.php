@@ -20,16 +20,9 @@
 require_once __DIR__  . '/../../../../core/php/core.inc.php';
 require_once __DIR__ . '/../../resources/apirainbird/ApiRainBird.php';
 
-class RainBird extends eqLogic {
-    /*     * *************************Attributs****************************** */
+class rainbird extends eqLogic {
+	public static $_widgetPossibility = array('custom' => true, 'custom::layout' => false);
 
-  /*
-   * Permet de définir les possibilités de personnalisation du widget (en cas d'utilisation de la fonction 'toHtml' par exemple)
-   * Tableau multidimensionnel - exemple: array('custom' => true, 'custom::layout' => false)
-	public static $_widgetPossibility = array();
-   */
-    
-    /*     * ***********************Methode static*************************** */
     public function updateRainbird() {
         $apirainbird = new ApiRainBird($this->getConfiguration('iprainbird'), $this->getConfiguration('mdprainbird'));
 
@@ -44,28 +37,12 @@ class RainBird extends eqLogic {
         $this->refreshWidget();
     }
 
-    /*
-     * Fonction exécutée automatiquement toutes les minutes par Jeedom
-     */
-      public static function cron() {
-          foreach (RainBird::byType('RainBird') as $eqLogic) {
-              if ($eqLogic->getIsEnable() == 1) {
-                  $eqLogic->updateRainbird();
-              }
-          }
-      }
-
-    /*     * *********************Méthodes d'instance************************* */
-
-
-    // Fonction exécutée automatiquement avant la création de l'équipement
-    public function preInsert() {
-        
-    }
-
-    // Fonction exécutée automatiquement après la création de l'équipement
-    public function postInsert() {
-        
+    public static function cron() {
+        foreach (RainBird::byType('rainbird') as $eqLogic) {
+            if ($eqLogic->getIsEnable() == 1) {
+                $eqLogic->updateRainbird();
+            }
+        }
     }
 
     /**
@@ -75,15 +52,15 @@ class RainBird extends eqLogic {
      */
     public function preUpdate() {
         if ($this->getConfiguration('iprainbird') === '') {
-            throw new Exception(__('Veuillez saisir l\'adresse IP du RainBird', __FILE__));
+            throw new Exception(__('Veuillez saisir l\'adresse IP du rainbird', __FILE__));
         }
 
         if ($this->getConfiguration('mdprainbird') === '') {
-            throw new Exception(__('Veuillez saisir votre mot de passe du RainBird', __FILE__));
+            throw new Exception(__('Veuillez saisir votre mot de passe du rainbird', __FILE__));
         }
 
         if ($this->getConfiguration('nbzone') === '') {
-            throw new Exception(__('Veuillez sélectionner le nombre de zone du RainBird', __FILE__));
+            throw new Exception(__('Veuillez sélectionner le nombre de zone du rainbird', __FILE__));
         }
     }
 
@@ -252,20 +229,8 @@ class RainBird extends eqLogic {
         }
     }
 
-    // Fonction exécutée automatiquement avant la suppression de l'équipement
-    public function preRemove() {
-
-    }
-
-    // Fonction exécutée automatiquement après la suppression de l'équipement
-    public function postRemove() {
-        
-    }
-
     /**
      * Vérification si les dependances sont installé
-     *
-     * @return array
      */
     public static function dependancy_info(): array
     {
@@ -287,9 +252,7 @@ class RainBird extends eqLogic {
     }
 
     /**
-     * Install les dépendances de python pour utiliser l'API de RainBird
-     *
-     * @return array
+     * Install les dépendances de python pour utiliser l'API de rainbird
      */
     public static function dependancy_install(): array
     {
@@ -354,107 +317,69 @@ class RainBird extends eqLogic {
               $replace['#zonestop'.$i.'#'] = is_object($stopzone) ? $stopzone->getId() : '';
           }
 
-          $html = template_replace($replace, getTemplate('core', $_version, 'RainBird', 'RainBird'));
+          $html = template_replace($replace, getTemplate('core', $_version, 'rainbird', 'rainbird'));
           cache::set('widgetHtml' . $_version . $this->getId(), $html, 0);
           return $html;
-      }
-
-
-    /*
-     * Non obligatoire : permet de déclencher une action après modification de variable de configuration
-    public static function postConfig_<Variable>() {
     }
-     */
-
-    /*
-     * Non obligatoire : permet de déclencher une action avant modification de variable de configuration
-    public static function preConfig_<Variable>() {
-    }
-     */
-
-    /*     * **********************Getteur Setteur*************************** */
 }
 
 class RainBirdCmd extends cmd {
-    /*     * *************************Attributs****************************** */
-    
-    /*
-      public static $_widgetPossibility = array();
-    */
-    
-    /*     * ***********************Methode static*************************** */
-
-
-    /*     * *********************Methode d'instance************************* */
-
-//    /**
-//     * @return bool
-//     */
-//    public function dontRemoveCmd(): bool
-//    {
-//        return true;
-//    }
-
     /**
      * Exécution des commandes via le dashbord
      *
      * @param array $_options
-     * @return void
      * @throws Exception
      */
     public function execute($_options = array()) {
         $eqLogic = $this->getEqLogic();
-        if (isset($eqLogic)) {
-            $apirainbird = new ApiRainBird($eqLogic->getConfiguration('iprainbird'), $eqLogic->getConfiguration('mdprainbird'));
+        $apirainbird = new ApiRainBird($eqLogic->getConfiguration('iprainbird'), $eqLogic->getConfiguration('mdprainbird'));
 
-            if ($apirainbird->get_current_date()[0] == 'None'){
-                throw new Exception(__('Vérifier votre login et mot de passe ou l\'application RainBird lancé sur votre Téléphone', __FILE__));
-            }
+        if ($apirainbird->get_current_date()[0] == 'None'){
+            throw new Exception(__('Vérifier votre login et mot de passe ou l\'application rainbird lancé sur votre Téléphone', __FILE__));
+        }
 
-            for ($i = 1; $i <= $eqLogic->getConfiguration('nbzone'); $i++){
-                if ($this->getLogicalId() === 'zonelancer'.$i.''){
-                    $getintzonelancer = (int) substr($this->getLogicalId(), -1); // Récupération du dernier chiffre de la zone
-                    if ($getintzonelancer === 0){
-                        $getintzonelancer = (int) substr($this->getLogicalId(), -2);
-                    }
-
-                    $gettimezone = (int) $eqLogic->getConfiguration('duree'.$i.'');
-                    if ($gettimezone !== 0){
-                        $apirainbird->irrigate_zone($getintzonelancer, $gettimezone);
-                    }
-                    $eqLogic->checkAndUpdateCmd('getzonelancer'.$i, $apirainbird->get_zone_state($i)[0]);
-                    log::add('RainBird','debug','Lancement de l\'action irrigation pour la zone '.$getintzonelancer);
+        for ($i = 1; $i <= $eqLogic->getConfiguration('nbzone'); $i++){
+            if ($this->getLogicalId() === 'zonelancer'.$i.''){
+                $getintzonelancer = (int) substr($this->getLogicalId(), -1); // Récupération du dernier chiffre de la zone
+                if ($getintzonelancer === 0){
+                    $getintzonelancer = (int) substr($this->getLogicalId(), -2);
                 }
 
-                if ($this->getLogicalId() === 'zonestop'.$i.''){
-                    $apirainbird->stop_irrigation();
-                    $eqLogic->checkAndUpdateCmd('getzonelancer'.$i, $apirainbird->get_zone_state($i)[0]);
-                    log::add('RainBird','debug','Lancement de l\'action pour arreter l\'irrigation de la zone '.$i);
+                $gettimezone = (int) $eqLogic->getConfiguration('duree'.$i.'');
+                if ($gettimezone !== 0){
+                    $apirainbird->irrigate_zone($getintzonelancer, $gettimezone);
                 }
+                $eqLogic->checkAndUpdateCmd('getzonelancer'.$i, $apirainbird->get_zone_state($i)[0]);
+                log::add('rainbird','debug','Lancement de l\'action irrigation pour la zone '.$getintzonelancer);
             }
 
-            if ($this->getLogicalId() === 'stopirrigation'){
+            if ($this->getLogicalId() === 'zonestop'.$i.''){
                 $apirainbird->stop_irrigation();
                 $eqLogic->checkAndUpdateCmd('getzonelancer'.$i, $apirainbird->get_zone_state($i)[0]);
-                log::add('RainBird','debug','Lancement de l\'action pour arreter l\'irrigation');
+                log::add('rainbird','debug','Lancement de l\'action pour arreter l\'irrigation de la zone '.$i);
             }
-
-            if ($this->getLogicalId() === 'setraindelay'){
-                $getvaleurslider = $_options['slider'];
-                $apirainbird->set_rain_delay($getvaleurslider);
-                log::add('RainBird','debug','Lancement de l\'action pour arreter l\'irrigation sur un nombre de jours');
-            }
-
-            if ($this->getLogicalId() === 'zonetest'){
-                $apirainbird->test_zone($eqLogic->getConfiguration('dureetestzone'));
-                log::add('RainBird','debug','Lancement de l\'action test des zones');
-            }
-
-            $eqLogic->refreshWidget();
         }
-    }
 
-    /*     * **********************Getteur Setteur*************************** */
+        if ($this->getLogicalId() === 'stopirrigation'){
+            $apirainbird->stop_irrigation();
+            $eqLogic->checkAndUpdateCmd('getzonelancer'.$i, $apirainbird->get_zone_state($i)[0]);
+            log::add('rainbird','debug','Lancement de l\'action pour arreter l\'irrigation');
+        }
+
+        if ($this->getLogicalId() === 'setraindelay'){
+            $getvaleurslider = $_options['slider'];
+            $apirainbird->set_rain_delay($getvaleurslider);
+            $eqLogic->checkAndUpdateCmd('getraindelay', $apirainbird->get_rain_delay()[0]);
+            log::add('rainbird','debug','Lancement de l\'action pour arreter l\'irrigation sur un nombre de jours');
+        }
+
+        if ($this->getLogicalId() === 'zonetest'){
+            $apirainbird->test_zone($eqLogic->getConfiguration('dureetestzone'));
+            log::add('rainbird','debug','Lancement de l\'action test des zones');
+        }
+
+        $eqLogic->refreshWidget();
+    }
 }
 
 

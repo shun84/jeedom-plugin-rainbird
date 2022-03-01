@@ -1,5 +1,5 @@
 {
-	"id" : "RainBird",
+	"id" : "rainbird",
 	"name" : "Rain Bird",
 	"description" : {
 		"fr_FR": "Plugin pour récupérer les informations pour l'arrosage avec le boitier Rain Bird"
