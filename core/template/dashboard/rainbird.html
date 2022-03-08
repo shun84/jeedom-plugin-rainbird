@@ -22,59 +22,19 @@
         </div>
         <div class="col-md-3 center">
             <div>Arreter toute l'irrigation</div>
-            <span id="cmd_#stopirrigation#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#stopirrigation#" title="Arreter toute l'irrigation">
+            <span id="cmd_#stopirrigation#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#stopirrigation#" onclick="jeedom.cmd.execute({id: $(this).data('cmd_id')});" title="Arreter toute l'irrigation">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-stop"></i>
                   </a>
             </span>
         </div>
         <div class="col-md-3 center">
-            <div>Retarder l'arrosage de #getraindelay# jours </div>
-            <div class="cmd cmd-widget" data-type="action" data-subtype="slider" data-template="button" data-cmd_id="#setraindelay#">
-                <div class="content-sm ">
-                    <div class="input-group buttons">
-                        <span class="input-group-btn" style="position: relative;">
-                            <a class="btn btn-default btn-sm bt_minus roundedLeft"><i class="fas fa-minus"></i></a>
-                        </span>
-                        <input type="text" class="input-sm in_value form-control text-center" value="#getraindelay#" disabled="">
-                        <span class="input-group-btn" style="position: relative;">
-                            <a class="btn btn-default btn-sm bt_plus roundedRight"><i class="fa fa-plus"></i></a>
-                        </span>
-                    </div>
-                </div>
-                <script>
-                    $('.cmd[data-cmd_id=#setraindelay#] .bt_plus').on('click', function () {
-                        let max = ('14' === '') ?  Number.MAX_VALUE : parseInt('14');
-                        let step = (isNaN(parseInt('#step#'))) ?  1 : parseInt('#step#');
-                        if (parseFloat($('.cmd[data-cmd_id=#setraindelay#] .in_value').val()) <= max - step ){
-                            jeedom.cmd.update['#setraindelay#']({display_value:parseInt($('.cmd[data-cmd_id=#setraindelay#] .in_value').val()) + step});
-                            $('.cmd[data-cmd_id=#setraindelay#] .in_value').trigger('change');
-                        }
-                    });
-                    $('.cmd[data-cmd_id=#setraindelay#] .bt_minus').on('click', function () {
-                        let min = ('0' === '') ? Number.MIN_VALUE : parseInt('0');
-                        let step = (isNaN(parseInt('#step#'))) ?  1 : parseInt('#step#');
-                        if (parseFloat($('.cmd[data-cmd_id=#setraindelay#] .in_value').val()) >= min + step){
-                            jeedom.cmd.update['#setraindelay#']({display_value:parseInt($('.cmd[data-cmd_id=#setraindelay#] .in_value').val()) - step});
-                            $('.cmd[data-cmd_id=#setraindelay#] .in_value').trigger('change');
-                        }
-                    });
-                    $('.cmd[data-cmd_id=#setraindelay#] .in_value').on('change', function () {
-                        jeedom.cmd.execute({id:'#setraindelay#', value: {slider: $('.cmd[data-cmd_id=#setraindelay#] .in_value').val().replace("°C", "").replace(" ", "")}});
-                    });
-
-                    jeedom.cmd.update['#setraindelay#'] = function(_options){
-                        $('.cmd[data-cmd_id=#setraindelay#] .in_value').val(_options.display_value);
-                    }
-
-                    jeedom.cmd.update['#setraindelay#']({display_value:'#getraindelay#'});
-                </script>
-            </div>
+            #raindelay#
         </div>
         <div class="col-md-3 center">
             <div>Tester toutes les zones</div>
             <div>#getdureetestzone# minutes</div>
-            <span id="cmd_#zonetest#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonetest#" title="Lancer l'irrigation pour toutes les zones">
+            <span id="cmd_#zonetest#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonetest#" onclick="jeedom.cmd.execute({id: $(this).data('cmd_id')});" title="Lancer l'irrigation pour toutes les zones">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
@@ -86,12 +46,12 @@
             <div>#nomzone1#</div>
             <div id="getzonelancer1">#getzonelancer1#</div>
             <div id="duree1">#duree1# minutes</div>
-            <span id="cmd_#zonestop1#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop1#" title="Stop l'irrigation pour la Zone 1">
+            <span id="cmd_#zonestop1#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop1#" onclick="jeedom.cmd.execute({id: $(this).data('cmd_id')});" title="Stop l'irrigation pour la Zone 1">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-stop"></i>
                   </a>
             </span>
-            <span id="cmd_#zonelancer1#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer1#" title="Lancer l'irrigation pour la Zone 1">
+            <span id="cmd_#zonelancer1#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer1#" onclick="jeedom.cmd.execute({id: $(this).data('cmd_id')});" title="Lancer l'irrigation pour la Zone 1">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
@@ -101,12 +61,12 @@
             <div>#nomzone2#</div>
             <div id="getzonelancer2">#getzonelancer2#</div>
             <div id="duree2">#duree2# minutes</div>
-            <span id="cmd_#zonestop2#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop2#" title="Stop l'irrigation pour la Zone 2">
+            <span id="cmd_#zonestop2#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop2#" onclick="jeedom.cmd.execute({id: $(this).data('cmd_id')});" title="Stop l'irrigation pour la Zone 2">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-stop"></i>
                   </a>
             </span>
-            <span id="cmd_#zonelancer2#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer2#" title="Lancer l'irrigation pour la Zone 2">
+            <span id="cmd_#zonelancer2#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer2#" onclick="jeedom.cmd.execute({id: $(this).data('cmd_id')});" title="Lancer l'irrigation pour la Zone 2">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
@@ -116,12 +76,12 @@
             <div>#nomzone3#</div>
             <div id="getzonelancer3">#getzonelancer3#</div>
             <div id="duree3">#duree3# minutes</div>
-            <span id="cmd_#zonestop3#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop3#" title="Stop l'irrigation pour la Zone 3">
+            <span id="cmd_#zonestop3#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop3#" onclick="jeedom.cmd.execute({id: $(this).data('cmd_id')});" title="Stop l'irrigation pour la Zone 3">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-stop"></i>
                   </a>
             </span>
-            <span id="cmd_#zonelancer3#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer3#" title="Lancer l'irrigation pour la Zone 3">
+            <span id="cmd_#zonelancer3#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer3#" onclick="jeedom.cmd.execute({id: $(this).data('cmd_id')});" title="Lancer l'irrigation pour la Zone 3">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
@@ -131,12 +91,12 @@
             <div>#nomzone4#</div>
             <div id="getzonelancer4">#getzonelancer4#</div>
             <div id="duree4">#duree4# minutes</div>
-            <span id="cmd_#zonestop4#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop4#" title="Stop l'irrigation pour la Zone 4">
+            <span id="cmd_#zonestop4#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop4#" onclick="jeedom.cmd.execute({id: $(this).data('cmd_id')});" title="Stop l'irrigation pour la Zone 4">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-stop"></i>
                   </a>
             </span>
-            <span id="cmd_#zonelancer4#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer4#" title="Lancer l'irrigation pour la Zone 4">
+            <span id="cmd_#zonelancer4#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer4#" onclick="jeedom.cmd.execute({id: $(this).data('cmd_id')});" title="Lancer l'irrigation pour la Zone 4">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
@@ -148,12 +108,12 @@
             <div>#nomzone5#</div>
             <div id="getzonelancer5">#getzonelancer5#</div>
             <div id="duree5">#duree5# minutes</div>
-            <span id="cmd_#zonestop5#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop5#" title="Stop l'irrigation pour la Zone 5">
+            <span id="cmd_#zonestop5#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop5#" onclick="jeedom.cmd.execute({id: $(this).data('cmd_id')});" title="Stop l'irrigation pour la Zone 5">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-stop"></i>
                   </a>
             </span>
-            <span id="cmd_#zonelancer5#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer5#" title="Lancer l'irrigation pour la Zone 5">
+            <span id="cmd_#zonelancer5#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer5#" onclick="jeedom.cmd.execute({id: $(this).data('cmd_id')});" title="Lancer l'irrigation pour la Zone 5">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
@@ -163,12 +123,12 @@
             <div>#nomzone6#</div>
             <div id="getzonelancer6">#getzonelancer6#</div>
             <div id="duree6">#duree6# minutes</div>
-            <span id="cmd_#zonestop6#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop6#" title="Stop l'irrigation pour la Zone 6">
+            <span id="cmd_#zonestop6#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop6#" onclick="jeedom.cmd.execute({id: $(this).data('cmd_id')});" title="Stop l'irrigation pour la Zone 6">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-stop"></i>
                   </a>
             </span>
-            <span id="cmd_#zonelancer6#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer6#" title="Lancer l'irrigation pour la Zone 6">
+            <span id="cmd_#zonelancer6#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer6#" onclick="jeedom.cmd.execute({id: $(this).data('cmd_id')});" title="Lancer l'irrigation pour la Zone 6">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
@@ -178,12 +138,12 @@
             <div>#nomzone7#</div>
             <div id="getzonelancer7">#getzonelancer7#</div>
             <div id="duree7">#duree7# minutes</div>
-            <span id="cmd_#zonestop7#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop7#" title="Stop l'irrigation pour la Zone 7">
+            <span id="cmd_#zonestop7#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop7#" onclick="jeedom.cmd.execute({id: $(this).data('cmd_id')});" title="Stop l'irrigation pour la Zone 7">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-stop"></i>
                   </a>
             </span>
-            <span id="cmd_#zonelancer7" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer7#" title="Lancer l'irrigation pour la Zone 7">
+            <span id="cmd_#zonelancer7" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer7#" onclick="jeedom.cmd.execute({id: $(this).data('cmd_id')});" title="Lancer l'irrigation pour la Zone 7">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
@@ -193,12 +153,12 @@
             <div>#nomzone8#</div>
             <div id="getzonelancer8">#getzonelancer8#</div>
             <div id="duree8">#duree8# minutes</div>
-            <span id="cmd_#zonestop8#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop8#" title="Stop l'irrigation pour la Zone 8">
+            <span id="cmd_#zonestop8#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop8#" onclick="jeedom.cmd.execute({id: $(this).data('cmd_id')});" title="Stop l'irrigation pour la Zone 8">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-stop"></i>
                   </a>
             </span>
-            <span id="cmd_#zonelancer8" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer8#" title="Lancer l'irrigation pour la Zone 8">
+            <span id="cmd_#zonelancer8" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer8#" onclick="jeedom.cmd.execute({id: $(this).data('cmd_id')});" title="Lancer l'irrigation pour la Zone 8">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>
                   </a>
@@ -222,110 +182,6 @@
             if (zoneid){
                 zoneid.hidden = true;
             }
-        }
-
-        document.getElementById('cmd_#zonetest#').addEventListener('click', function () {
-            jeedom.cmd.execute({id: '#zonetest#'});
-        });
-
-        document.getElementById('cmd_#stopirrigation#').addEventListener('click', function () {
-            jeedom.cmd.execute({id: '#stopirrigation#'});
-        });
-
-        if (document.getElementById('cmd_#zonelancer1#')){
-            document.getElementById('cmd_#zonelancer1#').addEventListener('click', function () {
-                jeedom.cmd.execute({id: '#zonelancer1#'});
-            });
-        }
-
-        if (document.getElementById('cmd_#zonelancer2#')){
-            document.getElementById('cmd_#zonelancer2#').addEventListener('click', function () {
-                jeedom.cmd.execute({id: '#zonelancer2#'});
-            });
-        }
-
-        if (document.getElementById('cmd_#zonelancer3#')){
-            document.getElementById('cmd_#zonelancer3#').addEventListener('click', function () {
-                jeedom.cmd.execute({id: '#zonelancer3#'});
-            });
-        }
-
-        if (document.getElementById('cmd_#zonelancer4#')){
-            document.getElementById('cmd_#zonelancer4#').addEventListener('click', function () {
-                jeedom.cmd.execute({id: '#zonelancer4#'});
-            });
-        }
-
-        if (document.getElementById('cmd_#zonelancer5#')){
-            document.getElementById('cmd_#zonelancer5#').addEventListener('click', function () {
-                jeedom.cmd.execute({id: '#zonelancer5#'});
-            });
-        }
-
-        if (document.getElementById('cmd_#zonelancer6#')){
-            document.getElementById('cmd_#zonelancer6#').addEventListener('click', function () {
-                jeedom.cmd.execute({id: '#zonelancer6#'});
-            });
-        }
-
-        if (document.getElementById('cmd_#zonelancer7#')){
-            document.getElementById('cmd_#zonelancer7#').addEventListener('click', function () {
-                jeedom.cmd.execute({id: '#zonelancer7#'});
-            });
-        }
-
-        if (document.getElementById('cmd_#zonelancer8#')){
-            document.getElementById('cmd_#zonelancer8#').addEventListener('click', function () {
-                jeedom.cmd.execute({id: '#zonelancer8#'});
-            });
-        }
-
-        if (document.getElementById('cmd_#zonestop1#')){
-            document.getElementById('cmd_#zonestop1#').addEventListener('click', function () {
-                jeedom.cmd.execute({id: '#zonestop1#'});
-            });
-        }
-
-        if (document.getElementById('cmd_#zonestop2#')){
-            document.getElementById('cmd_#zonestop2#').addEventListener('click', function () {
-                jeedom.cmd.execute({id: '#zonestop2#'});
-            });
-        }
-
-        if (document.getElementById('cmd_#zonestop3#')){
-            document.getElementById('cmd_#zonestop3#').addEventListener('click', function () {
-                jeedom.cmd.execute({id: '#zonestop3#'});
-            });
-        }
-
-        if (document.getElementById('cmd_#zonestop4#')){
-            document.getElementById('cmd_#zonestop4#').addEventListener('click', function () {
-                jeedom.cmd.execute({id: '#zonestop4#'});
-            });
-        }
-
-        if (document.getElementById('cmd_#zonestop5#')){
-            document.getElementById('cmd_#zonestop5#').addEventListener('click', function () {
-                jeedom.cmd.execute({id: '#zonestop5#'});
-            });
-        }
-
-        if (document.getElementById('cmd_#zonestop6#')){
-            document.getElementById('cmd_#zonestop6#').addEventListener('click', function () {
-                jeedom.cmd.execute({id: '#zonestop6#'});
-            });
-        }
-
-        if (document.getElementById('cmd_#zonestop7#')){
-            document.getElementById('cmd_#zonestop7#').addEventListener('click', function () {
-                jeedom.cmd.execute({id: '#zonestop7#'});
-            });
-        }
-
-        if (document.getElementById('cmd_#zonestop8#')){
-            document.getElementById('cmd_#zonestop8#').addEventListener('click', function () {
-                jeedom.cmd.execute({id: '#zonestop8#'});
-            });
         }
     </script>
 </div>

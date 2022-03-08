@@ -266,60 +266,69 @@ class rainbird extends eqLogic {
      * @throws Exception
      */
     public function toHtml($_version = 'dashboard') {
-          $replace = $this->preToHtml($_version);
-          if (!is_array($replace)) {
-              return $replace;
-          }
-          $_version = jeedom::versionAlias($_version);
+        $replace = $this->preToHtml($_version);
+        if (!is_array($replace)) {
+            return $replace;
+        }
+        $version = jeedom::versionAlias($_version);
 
-          $daterainbird = $this->getCmd(null, 'daterainbird');
-          $replace['#daterainbird#'] = is_object($daterainbird) ? $daterainbird->execCmd() : '';
+        $daterainbird = $this->getCmd(null, 'daterainbird');
+        $replace['#daterainbird#'] = is_object($daterainbird) ? $daterainbird->execCmd() : '';
 
-          $timerainbird = $this->getCmd(null, 'timerainbird');
-          $timerainbird = substr(is_object($timerainbird) ? $timerainbird->execCmd() : '', 0,-3);
-          $replace['#timerainbird#'] = $timerainbird;
+        $timerainbird = $this->getCmd(null, 'timerainbird');
+        $timerainbird = substr(is_object($timerainbird) ? $timerainbird->execCmd() : '', 0,-3);
+        $replace['#timerainbird#'] = $timerainbird;
 
-          $stopirrigation = $this->getCmd(null, 'stopirrigation');
-          $replace['#stopirrigation#'] = is_object($stopirrigation) ? $stopirrigation->getId() : '';
+        $stopirrigation = $this->getCmd(null, 'stopirrigation');
+        $replace['#stopirrigation#'] = is_object($stopirrigation) ? $stopirrigation->getId() : '';
 
-          $getraindelay = $this->getCmd(null, 'getraindelay');
-          $replace['#getraindelay#'] = is_object($getraindelay) ? $getraindelay->execCmd() : '';
+        $replaceraindelay = [];
 
-          $setraindelay = $this->getCmd(null, 'setraindelay');
-          $replace['#setraindelay#'] = is_object($setraindelay) ? $setraindelay->getId() : '';
+        $setraindelay = $this->getCmd(null, 'setraindelay');
+        $replaceraindelay['#id#'] = is_object($setraindelay) ? $setraindelay->getId() : '';
+        $replaceraindelay['#maxValue#'] = is_object($setraindelay) ? $setraindelay->getConfiguration('maxValue') : '';
+        $replaceraindelay['#minValue#'] = is_object($setraindelay) ? $setraindelay->getConfiguration('minValue') : '';
 
-          $getdureetestzone = $this->getConfiguration('dureetestzone');
-          $replace['#getdureetestzone#'] = $getdureetestzone;
+        $getraindelay = $this->getCmd(null, 'getraindelay');
+        $replaceraindelay['#name_display#'] = is_object($getraindelay) ? $getraindelay->getName() : '';
+        $replaceraindelay['#uid#'] = is_object($getraindelay) ? $getraindelay->getId() : '';
+        $replaceraindelay['#state#'] = is_object($getraindelay) ? $getraindelay->execCmd() : '';
+        $replaceraindelay['#unite#'] = is_object($getraindelay) ? $getraindelay->getUnite() : '';
 
-          $zonetest = $this->getCmd(null, 'zonetest');
-          $replace['#zonetest#'] = is_object($zonetest) ? $zonetest->getId() : '';
+        $replace['#raindelay#'] = template_replace($replaceraindelay, getTemplate('core', $version, 'raindelay', __CLASS__));
 
-          $nbzone = $this->getConfiguration('nbzone');
-          $replace['#nbzone#'] = $nbzone;
+        $getdureetestzone = $this->getConfiguration('dureetestzone');
+        $replace['#getdureetestzone#'] = $getdureetestzone;
 
-          for ($i = 1; $i <= $this->getConfiguration('nbzone'); $i++){
-              $gettimezone = $this->getConfiguration('duree'.$i);
-              $replace['#duree'.$i.'#'] = $gettimezone;
+        $zonetest = $this->getCmd(null, 'zonetest');
+        $replace['#zonetest#'] = is_object($zonetest) ? $zonetest->getId() : '';
 
-              $getnomzone = $this->getConfiguration('nomzone'.$i);
-              $replace['#nomzone'.$i.'#'] = $getnomzone;
+        $nbzone = $this->getConfiguration('nbzone');
+        $replace['#nbzone#'] = $nbzone;
 
-              $getzone = $this->getCmd(null, 'zone'.$i);
-              $replace['#zone'.$i.'#'] = is_object($getzone) ? $getzone->getLogicalId() : '';
+        for ($i = 1; $i <= $this->getConfiguration('nbzone'); $i++){
+            $gettimezone = $this->getConfiguration('duree'.$i);
+            $replace['#duree'.$i.'#'] = $gettimezone;
 
-              $lancerzone = $this->getCmd(null, 'zonelancer'.$i);
-              $replace['#zonelancer'.$i.'#'] = is_object($lancerzone) ? $lancerzone->getId() : '';
+            $getnomzone = $this->getConfiguration('nomzone'.$i);
+            $replace['#nomzone'.$i.'#'] = $getnomzone;
 
-              $getzonelancer = $this->getCmd(null, 'getzonelancer'.$i);
-              $replace['#getzonelancer'.$i.'#'] = is_object($getzonelancer) ? $getzonelancer->execCmd() : '';
+            $getzone = $this->getCmd(null, 'zone'.$i);
+            $replace['#zone'.$i.'#'] = is_object($getzone) ? $getzone->getLogicalId() : '';
 
-              $stopzone = $this->getCmd(null, 'zonestop'.$i);
-              $replace['#zonestop'.$i.'#'] = is_object($stopzone) ? $stopzone->getId() : '';
-          }
+            $lancerzone = $this->getCmd(null, 'zonelancer'.$i);
+            $replace['#zonelancer'.$i.'#'] = is_object($lancerzone) ? $lancerzone->getId() : '';
 
-          $html = template_replace($replace, getTemplate('core', $_version, 'rainbird', 'rainbird'));
-          cache::set('widgetHtml' . $_version . $this->getId(), $html, 0);
-          return $html;
+            $getzonelancer = $this->getCmd(null, 'getzonelancer'.$i);
+            $replace['#getzonelancer'.$i.'#'] = is_object($getzonelancer) ? $getzonelancer->execCmd() : '';
+
+            $stopzone = $this->getCmd(null, 'zonestop'.$i);
+            $replace['#zonestop'.$i.'#'] = is_object($stopzone) ? $stopzone->getId() : '';
+        }
+
+        $html = template_replace($replace, getTemplate('core', $version, 'rainbird', 'rainbird'));
+        cache::set('widgetHtml' . $_version . $this->getId(), $html, 0);
+        return $html;
     }
 }
 
