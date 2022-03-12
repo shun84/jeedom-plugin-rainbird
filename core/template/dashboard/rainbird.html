@@ -16,11 +16,15 @@
     </div>
     <div class="row">
         <div class="col-md-3 center">
-            <div>Date et Heure</div>
+            <div class="title">
+                <div class="cmdName">Date et Heure</div>
+            </div>
             <div>#daterainbird# #timerainbird#</div>
         </div>
         <div class="col-md-3 center">
-            <div>Arreter toute l'irrigation</div>
+            <div class="title">
+                <div class="cmdName">Arreter toute l'irrigation</div>
+            </div>
             <span id="cmd_#stopirrigation#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#stopirrigation#" onclick="jeedom.cmd.execute({id: $(this).data('cmd_id')});" title="Arreter toute l'irrigation">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-stop"></i>
@@ -31,8 +35,9 @@
             #raindelay#
         </div>
         <div class="col-md-3 center">
-            <div>Tester toutes les zones</div>
-            <div>#getdureetestzone# minutes</div>
+            <div class="title">
+                <div class="cmdName">Tester toutes les zones #getdureetestzone# minutes</div>
+            </div>
             <span id="cmd_#zonetest#" class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonetest#" onclick="jeedom.cmd.execute({id: $(this).data('cmd_id')});" title="Lancer l'irrigation pour toutes les zones">
                   <a class="btn btn-sm btn-default action">
                       <i class="fas fa-play"></i>

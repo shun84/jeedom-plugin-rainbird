@@ -71,18 +71,6 @@ class rainbird extends eqLogic {
      */
     public function postUpdate() {
         for ($i = 1; $i <= $this->getConfiguration('nbzone'); $i++){
-            $zone = $this->getCmd(null, 'zone'.$i);
-            if (!is_object($zone)) {
-                $zone = new rainbirdCmd();
-            }
-            $zone->setName(__('Zone '.$i, __FILE__));
-            $zone->setIsVisible(0);
-            $zone->setLogicalId('zone'.$i);
-            $zone->setEqLogic_id($this->getId());
-            $zone->setType('info');
-            $zone->setSubType('string');
-            $zone->save();
-
             $zonelancer = $this->getCmd(null, 'zonelancer'.$i);
             if (!is_object($zonelancer)) {
                 $zonelancer = new rainbirdCmd();
@@ -143,7 +131,7 @@ class rainbird extends eqLogic {
 
         if ($this->getConfiguration('nbzone') > "4" && $this->getConfiguration('nbzone') < "9"){
             $this->setDisplay("width","632px");
-            $this->setDisplay("height","370px");
+            $this->setDisplay("height","350px");
         }
     }
 
@@ -190,7 +178,7 @@ class rainbird extends eqLogic {
         if (!is_object($getraindelay)) {
             $getraindelay = new rainbirdCmd();
         }
-        $getraindelay->setName(__('Récupération Stop Irrigation sur un nombre de jours', __FILE__));
+        $getraindelay->setName(__('Stop Irrigation sur un nombre de jours', __FILE__));
         $getraindelay->setLogicalId('getraindelay');
         $getraindelay->setEqLogic_id($this->getId());
         $getraindelay->setType('info');
@@ -204,13 +192,14 @@ class rainbird extends eqLogic {
         if (!is_object($setraindelay)) {
             $setraindelay = new rainbirdCmd();
         }
-        $setraindelay->setName(__('Retarder l\'arrosage', __FILE__));
+        $setraindelay->setName(__('Retarder arrosage', __FILE__));
         $setraindelay->setLogicalId('setraindelay');
         $setraindelay->setEqLogic_id($this->getId());
         $setraindelay->setType('action');
         $setraindelay->setSubType('slider');
         $setraindelay->setConfiguration('minValue',0);
         $setraindelay->setConfiguration('maxValue', 14);
+        $setraindelay->setValue($getraindelay->getId());
         $setraindelay->save();
 
         $zonetest = $this->getCmd(null, 'zonetest');
