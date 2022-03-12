@@ -3,7 +3,7 @@
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
 
-class ApiRainBird
+class rainbirdApi
 {
     private $iprainbird;
     private $mdprainbird;
