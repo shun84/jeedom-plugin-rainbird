@@ -23,6 +23,44 @@ require_once __DIR__ . '/../../core/api/rainbirdApi.php';
 class rainbird extends eqLogic {
 	public static $_widgetPossibility = array('custom' => true, 'custom::layout' => false);
 
+
+    /* ***********************Methode static*************************** */
+    public static function cron() {
+        foreach (rainbird::byType('rainbird') as $eqLogic) {
+            if ($eqLogic->getIsEnable() == 1) {
+                $eqLogic->updateRainbird();
+            }
+        }
+    }
+
+    public static function pluginGenericTypes(): array
+    {
+        return [
+            'RAINBIRD_STOPRAIN' => [
+                'name' => __('Arreter l\'irrigation',__FILE__),
+                'familyid' => 'rainbird',
+                'family' => __('Plugin RainBird',__FILE__),
+                'type' => 'Action',
+                'subtype' => ['other']
+            ],
+            'RAINBIRD_STARTRAIN' => [
+                'name' => __('Lancer l\'irrigation',__FILE__),
+                'familyid' => 'rainbird',
+                'family' => __('Plugin RainBird',__FILE__),
+                'type' => 'Action',
+                'subtype' => ['other']
+            ],
+            'RAINBIRD_GETRAIN' => [
+                'name' => __('Récupération l\'irrigation',__FILE__),
+                'familyid' => 'rainbird',
+                'family' => __('Plugin RainBird',__FILE__),
+                'type' => 'Info',
+                'subtype' => ['binary']
+            ]
+        ];
+    }
+
+    /* *********************Méthodes d'instance************************* */
     public function updateRainbird() {
         $apirainbird = new rainbirdApi($this->getConfiguration('iprainbird'), $this->getConfiguration('mdprainbird'));
 
@@ -35,14 +73,6 @@ class rainbird extends eqLogic {
         }
 
         $this->refreshWidget();
-    }
-
-    public static function cron() {
-        foreach (rainbird::byType('rainbird') as $eqLogic) {
-            if ($eqLogic->getIsEnable() == 1) {
-                $eqLogic->updateRainbird();
-            }
-        }
     }
 
     /**
@@ -71,18 +101,6 @@ class rainbird extends eqLogic {
      */
     public function postUpdate() {
         for ($i = 1; $i <= $this->getConfiguration('nbzone'); $i++){
-            $zone = $this->getCmd(null, 'zone'.$i);
-            if (!is_object($zone)) {
-                $zone = new rainbirdCmd();
-            }
-            $zone->setName(__('Zone '.$i, __FILE__));
-            $zone->setIsVisible(0);
-            $zone->setLogicalId('zone'.$i);
-            $zone->setEqLogic_id($this->getId());
-            $zone->setType('info');
-            $zone->setSubType('string');
-            $zone->save();
-
             $zonelancer = $this->getCmd(null, 'zonelancer'.$i);
             if (!is_object($zonelancer)) {
                 $zonelancer = new rainbirdCmd();
@@ -92,6 +110,7 @@ class rainbird extends eqLogic {
             $zonelancer->setEqLogic_id($this->getId());
             $zonelancer->setType('action');
             $zonelancer->setSubType('other');
+            $zonelancer->setGeneric_type('RAINBIRD_STARTRAIN');
             $zonelancer->save();
 
             $getzonelancer = $this->getCmd(null, 'getzonelancer'.$i);
@@ -103,6 +122,7 @@ class rainbird extends eqLogic {
             $getzonelancer->setEqLogic_id($this->getId());
             $getzonelancer->setType('info');
             $getzonelancer->setSubType('binary');
+            $getzonelancer->setGeneric_type('RAINBIRD_GETRAIN');
             $getzonelancer->save();
 
             $zonestop = $this->getCmd(null, 'zonestop'.$i);
@@ -114,6 +134,7 @@ class rainbird extends eqLogic {
             $zonestop->setEqLogic_id($this->getId());
             $zonestop->setType('action');
             $zonestop->setSubType('other');
+            $zonestop->setGeneric_type('RAINBIRD_STOPRAIN');
             $zonestop->save();
         }
     }
@@ -143,7 +164,7 @@ class rainbird extends eqLogic {
 
         if ($this->getConfiguration('nbzone') > "4" && $this->getConfiguration('nbzone') < "9"){
             $this->setDisplay("width","632px");
-            $this->setDisplay("height","370px");
+            $this->setDisplay("height","350px");
         }
     }
 
@@ -184,13 +205,14 @@ class rainbird extends eqLogic {
         $stopirrigation->setEqLogic_id($this->getId());
         $stopirrigation->setType('action');
         $stopirrigation->setSubType('other');
+        $stopirrigation->setGeneric_type('RAINBIRD_STOPRAIN');
         $stopirrigation->save();
 
         $getraindelay = $this->getCmd(null, 'getraindelay');
         if (!is_object($getraindelay)) {
             $getraindelay = new rainbirdCmd();
         }
-        $getraindelay->setName(__('Récupération Stop Irrigation sur un nombre de jours', __FILE__));
+        $getraindelay->setName(__('Stop Irrigation sur un nombre de jours', __FILE__));
         $getraindelay->setLogicalId('getraindelay');
         $getraindelay->setEqLogic_id($this->getId());
         $getraindelay->setType('info');
@@ -204,13 +226,14 @@ class rainbird extends eqLogic {
         if (!is_object($setraindelay)) {
             $setraindelay = new rainbirdCmd();
         }
-        $setraindelay->setName(__('Retarder l\'arrosage', __FILE__));
+        $setraindelay->setName(__('Retarder arrosage', __FILE__));
         $setraindelay->setLogicalId('setraindelay');
         $setraindelay->setEqLogic_id($this->getId());
         $setraindelay->setType('action');
         $setraindelay->setSubType('slider');
         $setraindelay->setConfiguration('minValue',0);
         $setraindelay->setConfiguration('maxValue', 14);
+        $setraindelay->setValue($getraindelay->getId());
         $setraindelay->save();
 
         $zonetest = $this->getCmd(null, 'zonetest');
@@ -222,6 +245,7 @@ class rainbird extends eqLogic {
         $zonetest->setEqLogic_id($this->getId());
         $zonetest->setType('action');
         $zonetest->setSubType('other');
+        $zonetest->setGeneric_type('RAINBIRD_STARTRAIN');
         $zonetest->save();
 
         if ($this->getIsEnable() == 1) {
