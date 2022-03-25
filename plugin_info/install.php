@@ -25,6 +25,12 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 // Fonction exécutée automatiquement après la mise à jour du plugin
   function rainbird_update() {
+      $dependencyInfo = rainbird::dependancy_info();
+      if (!isset($dependencyInfo['state'])) {
+          message::add('rainbird', __('Veuilez vérifier les dépendances', __FILE__));
+      } elseif ($dependencyInfo['state'] == 'nok') {
+          message::add('rainbird', __('Cette mise à jour nécessite absolument de relancer les dépendances même si elles apparaissent vertes', __FILE__));
+      }
 
   }
 
