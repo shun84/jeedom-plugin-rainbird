@@ -1,0 +1,31 @@
+<div class="cmd cmd-widget col-md-3 center" data-type="info" data-subtype="binary" data-template="tmplicon" data-cmd_id="#id#">
+    <div class="title">
+        <div class="cmdName">#name_display#</div>
+    </div>
+    <div class="center" style="margin-top: 5px">
+        <span class="icon"></span>
+    </div>
+    <div>#gettimezone# minutes</div>
+    <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonestop#" onclick="jeedom.cmd.execute({id: $(this).data('cmd_id')});" title="Stop l'irrigation pour la #name_display#">
+        <a class="btn btn-sm btn-default action">
+            <i class="fas fa-stop"></i>
+        </a>
+    </span>
+    <span class="cmd cmd-widget" data-type="action" data-toggle="tooltip" data-subtype="other" data-cmd_id="#zonelancer#" onclick="jeedom.cmd.execute({id: $(this).data('cmd_id')});" title="Lancer l'irrigation pour la #name_display#">
+        <a class="btn btn-sm btn-default action">
+            <i class="fas fa-play"></i>
+        </a>
+    </span>
+    <script>
+        jeedom.cmd.update['#id#'] = function(_options) {
+            let cmd = $('.cmd[data-cmd_id=#id#]');
+            if (_options.display_value === '1') {
+                cmd.find('.icon').empty().append("#_icon_on_#");
+            } else {
+                cmd.find('.icon').empty().append("#_icon_off_#");
+            }
+        }
+
+        jeedom.cmd.update['#id#']({display_value: '#state#'});
+    </script>
+</div>
