@@ -13,6 +13,17 @@
 	"maxDependancyInstallTime" : 0,
 	"changelog" : "https://shun84.github.io/jeedom-plugin-rainbird/#language#/changelog",
 	"documentation" : "https://shun84.github.io/jeedom-plugin-rainbird/#language#/",
-	"language" : ["fr_FR"],
-	"compatibility" : ["miniplus","smart","rpi","docker","diy","mobile","v4"]
+	"language": [
+		"fr_FR"
+	],
+	"compatibility": [
+		"miniplus",
+		"smart",
+		"rpi",
+		"docker",
+		"diy",
+		"mobile",
+		"v4",
+		"atlas"
+	]
 }
