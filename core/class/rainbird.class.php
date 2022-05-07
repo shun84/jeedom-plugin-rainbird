@@ -158,13 +158,11 @@ class rainbird extends eqLogic {
         }
 
         if ($this->getConfiguration('nbzone') < "5"){
-            $this->setDisplay("width","632px");
-            $this->setDisplay("height","272px");
+            $this->setDisplay("height","220px");
         }
 
         if ($this->getConfiguration('nbzone') > "4" && $this->getConfiguration('nbzone') < "9"){
-            $this->setDisplay("width","632px");
-            $this->setDisplay("height","350px");
+            $this->setDisplay("height","325px");
         }
     }
 
@@ -258,7 +256,7 @@ class rainbird extends eqLogic {
      */
     public static function dependancy_info(): array
     {
-        $return = array();
+        $return = [];
         $return['log'] = log::getPathToLog(__CLASS__.'_update');
         $return['progress_file'] = jeedom::getTmpFolder(__CLASS__).'/dependency';
         if (file_exists(jeedom::getTmpFolder(__CLASS__).'/dependency')) {
@@ -282,6 +280,31 @@ class rainbird extends eqLogic {
     {
         log::remove(__CLASS__ . '_update');
         return array('script' => dirname(__FILE__) . '/../../resources/install_#stype#.sh ' . jeedom::getTmpFolder(__CLASS__).'/dependency', 'log' => log::getPathToLog(__CLASS__.'_update'));
+    }
+
+    public function zoneHtml(int $i, string $version): string
+    {
+        $replacezone = [];
+
+        $getzonelancer = $this->getCmd(null, 'getzonelancer'.$i);
+        $replacezone['#id#'] = is_object($getzonelancer) ? $getzonelancer->getId() : '';
+        $replacezone['#state#'] = is_object($getzonelancer) ? $getzonelancer->execCmd() : '';
+        $replacezone['#_icon_on_#'] = '<i class=\'fas fa-tint fa-3x\'></i>';
+        $replacezone['#_icon_off_#'] = '<i class=\'fas fa-tint-slash fa-3x\'></i>';
+
+        $getnomzone = $this->getConfiguration('nomzone'.$i);
+        $replacezone['#name_display#'] = $getnomzone;
+
+        $gettimezone = $this->getConfiguration('duree'.$i);
+        $replacezone['#gettimezone#'] = $gettimezone;
+
+        $lancerzone = $this->getCmd(null, 'zonelancer'.$i);
+        $replacezone['#zonelancer#'] = is_object($lancerzone) ? $lancerzone->getId() : '';
+
+        $stopzone = $this->getCmd(null, 'zonestop'.$i);
+        $replacezone['#zonestop#'] = is_object($stopzone) ? $stopzone->getId() : '';
+
+        return template_replace($replacezone, getTemplate('core', $version, 'zone', __CLASS__));;
     }
 
     /**
@@ -327,85 +350,95 @@ class rainbird extends eqLogic {
         $zonetest = $this->getCmd(null, 'zonetest');
         $replace['#zonetest#'] = is_object($zonetest) ? $zonetest->getId() : '';
 
-        if ($this->getConfiguration('nbzone') < "5"){
-            $replace['#zone#'] .= '<div class="row" style="margin-top: 10px">';
-            for ($i = 1; $i <= $this->getConfiguration('nbzone'); $i++){
-                $replacezone = [];
+        $getnbzone = $this->getConfiguration('nbzone');
 
-                $getzonelancer = $this->getCmd(null, 'getzonelancer'.$i);
-                $replacezone['#id#'] = is_object($getzonelancer) ? $getzonelancer->getId() : '';
-                $replacezone['#state#'] = is_object($getzonelancer) ? $getzonelancer->execCmd() : '';
-                $replacezone['#_icon_on_#'] = '<i class=\'fas fa-tint fa-3x\'></i>';
-                $replacezone['#_icon_off_#'] = '<i class=\'fas fa-tint-slash fa-3x\'></i>';
-
-                $getnomzone = $this->getConfiguration('nomzone'.$i);
-                $replacezone['#name_display#'] = $getnomzone;
-
-                $gettimezone = $this->getConfiguration('duree'.$i);
-                $replacezone['#gettimezone#'] = $gettimezone;
-
-                $lancerzone = $this->getCmd(null, 'zonelancer'.$i);
-                $replacezone['#zonelancer#'] = is_object($lancerzone) ? $lancerzone->getId() : '';
-
-                $stopzone = $this->getCmd(null, 'zonestop'.$i);
-                $replacezone['#zonestop#'] = is_object($stopzone) ? $stopzone->getId() : '';
-
-                $replace['#zone#'] .= template_replace($replacezone, getTemplate('core', $version, 'zone', __CLASS__));
+        if ($version === 'mobile'){
+            if ($getnbzone < "3"){
+                $replace['#height#'] = '390px';
+                for ($i = 1; $i <= $getnbzone; $i++){
+                    $replace['#zone#'] .= '<div class="col-md-6" style="float: left">';
+                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
+                    $replace['#zone#'] .= '</div>';
+                }
             }
-            $replace['#zone#'] .= '</div>';
-        }
 
-        if ($this->getConfiguration('nbzone') > "4" && $this->getConfiguration('nbzone') < "9"){
-            $replace['#zone#'] .= '<div class="row" style="margin-top: 10px">';
-            for ($i = 1; $i <= 4; $i++){
-                $replacezone = [];
-
-                $getzonelancer = $this->getCmd(null, 'getzonelancer'.$i);
-                $replacezone['#id#'] = is_object($getzonelancer) ? $getzonelancer->getId() : '';
-                $replacezone['#state#'] = is_object($getzonelancer) ? $getzonelancer->execCmd() : '';
-                $replacezone['#_icon_on_#'] = '<i class=\'fas fa-tint fa-3x\'></i>';
-                $replacezone['#_icon_off_#'] = '<i class=\'fas fa-tint-slash fa-3x\'></i>';
-
-                $getnomzone = $this->getConfiguration('nomzone'.$i);
-                $replacezone['#name_display#'] = $getnomzone;
-
-                $gettimezone = $this->getConfiguration('duree'.$i);
-                $replacezone['#gettimezone#'] = $gettimezone;
-
-                $lancerzone = $this->getCmd(null, 'zonelancer'.$i);
-                $replacezone['#zonelancer#'] = is_object($lancerzone) ? $lancerzone->getId() : '';
-
-                $stopzone = $this->getCmd(null, 'zonestop'.$i);
-                $replacezone['#zonestop#'] = is_object($stopzone) ? $stopzone->getId() : '';
-
-                $replace['#zone#'] .= template_replace($replacezone, getTemplate('core', $version, 'zone', __CLASS__));
+            if ($getnbzone > "2" && $getnbzone < "5"){
+                $replace['#height#'] = '515px';
+                for ($i = 1; $i <= 2; $i++){
+                    $replace['#zone#'] .= '<div class="col-md-6" style="float: left">';
+                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
+                    $replace['#zone#'] .= '</div>';
+                }
+                for ($i = 3; $i <= $getnbzone; $i++){
+                    $replace['#zone#'] .= '<div class="col-md-6" style="float: left">';
+                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
+                    $replace['#zone#'] .= '</div>';
+                }
             }
-            $replace['#zone#'] .= '</div>';
-            $replace['#zone#'] .= '<div class="row" style="margin-top: 10px">';
-            for ($i = 5; $i <= $this->getConfiguration('nbzone'); $i++){
-                $replacezone = [];
 
-                $getzonelancer = $this->getCmd(null, 'getzonelancer'.$i);
-                $replacezone['#id#'] = is_object($getzonelancer) ? $getzonelancer->getId() : '';
-                $replacezone['#state#'] = is_object($getzonelancer) ? $getzonelancer->execCmd() : '';
-                $replacezone['#_icon_on_#'] = '<i class=\'fas fa-tint fa-3x\'></i>';
-                $replacezone['#_icon_off_#'] = '<i class=\'fas fa-tint-slash fa-3x\'></i>';
-
-                $getnomzone = $this->getConfiguration('nomzone'.$i);
-                $replacezone['#name_display#'] = $getnomzone;
-
-                $gettimezone = $this->getConfiguration('duree'.$i);
-                $replacezone['#gettimezone#'] = $gettimezone;
-
-                $lancerzone = $this->getCmd(null, 'zonelancer'.$i);
-                $replacezone['#zonelancer#'] = is_object($lancerzone) ? $lancerzone->getId() : '';
-
-                $stopzone = $this->getCmd(null, 'zonestop'.$i);
-                $replacezone['#zonestop#'] = is_object($stopzone) ? $stopzone->getId() : '';
-
-                $replace['#zone#'] .= template_replace($replacezone, getTemplate('core', $version, 'zone', __CLASS__));
+            if ($getnbzone > "4" && $getnbzone < "7"){
+                $replace['#height#'] = '625px';
+                for ($i = 1; $i <= 2; $i++){
+                    $replace['#zone#'] .= '<div class="col-md-6" style="float: left">';
+                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
+                    $replace['#zone#'] .= '</div>';
+                }
+                for ($i = 3; $i <= 4; $i++){
+                    $replace['#zone#'] .= '<div class="col-md-6" style="float: left">';
+                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
+                    $replace['#zone#'] .= '</div>';
+                }
+                for ($i = 5; $i <= $getnbzone; $i++){
+                    $replace['#zone#'] .= '<div class="col-md-6" style="float: left">';
+                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
+                    $replace['#zone#'] .= '</div>';
+                }
             }
-            $replace['#zone#'] .= '</div>';
+
+            if ($getnbzone > "6" && $getnbzone < "9"){
+                $replace['#height#'] = '755px';
+                for ($i = 1; $i <= 2; $i++){
+                    $replace['#zone#'] .= '<div class="col-md-6" style="float: left">';
+                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
+                    $replace['#zone#'] .= '</div>';
+                }
+                for ($i = 3; $i <= 4; $i++){
+                    $replace['#zone#'] .= '<div class="col-md-6" style="float: left">';
+                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
+                    $replace['#zone#'] .= '</div>';
+                }
+                for ($i = 5; $i <= 6; $i++){
+                    $replace['#zone#'] .= '<div class="col-md-6" style="float: left">';
+                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
+                    $replace['#zone#'] .= '</div>';
+                }
+                for ($i = 7; $i <= $getnbzone; $i++){
+                    $replace['#zone#'] .= '<div class="col-md-6" style="float: left">';
+                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
+                    $replace['#zone#'] .= '</div>';
+                }
+            }
+        }else{
+            if ($getnbzone < "5"){
+                $replace['#zone#'] .= '<div style="margin-top: 10px; height: 100px">';
+                    for ($i = 1; $i <= $getnbzone; $i++){
+                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
+                    }
+                $replace['#zone#'] .= '</div>';
+            }
+
+            if ($getnbzone> "4" && $getnbzone < "9"){
+                $replace['#zone#'] .= '<div style="margin-top: 10px; height: 100px">';
+                    for ($i = 1; $i <= 4; $i++){
+                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
+                    }
+                $replace['#zone#'] .= '</div>';
+                $replace['#zone#'] .= '<div style="margin-top: 10px; height: 100px">';
+                    for ($i = 5; $i <= $getnbzone; $i++){
+                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
+                    }
+                $replace['#zone#'] .= '</div>';
+            }
         }
 
         $html = $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'rainbird', 'rainbird')));
