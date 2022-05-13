@@ -30,7 +30,34 @@ try {
   */  
     ajax::init();
 
-
+    if (init('action') == 'getLinkCalendar') {
+        if (!isConnect('admin')) {
+            throw new Exception(__('401 - Accès non autorisé', __FILE__));
+        }
+        $rainbird = rainbird::byId(init('id'));
+        if (!is_object($rainbird)) {
+            throw new Exception(__('Rainbird non trouvé : ', __FILE__) . init('id'));
+        }
+        try {
+            $plugin = plugin::byId('calendar');
+            if (!is_object($plugin) || $plugin->isActive() != 1) {
+                ajax::success([]);
+            }
+        } catch (Exception $e) {
+            ajax::success([]);
+        }
+        if (!class_exists('calendar_event')) {
+            ajax::success([]);
+        }
+        $return = [];
+        $rainbird_cmd = $rainbird->getCmd(null, 'zonelancer1');
+        if (is_object($rainbird_cmd)) {
+            foreach (calendar_event::searchByCmd($rainbird_cmd->getId()) as $event) {
+                $return[$event->getId()] = $event;
+            }
+        }
+        ajax::success(utils::o2a($return));
+    }
 
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
     /*     * *********Catch exeption*************** */

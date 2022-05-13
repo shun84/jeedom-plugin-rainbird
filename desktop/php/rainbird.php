@@ -64,7 +64,18 @@ $eqLogics = eqLogic::byType($plugin->getId());
 			<li role="presentation"><a href="#" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fas fa-arrow-circle-left"></i></a></li>
 			<li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt"></i><span class="hidden-xs"> {{Équipement}}</span></a></li>
 			<li role="presentation"><a href="#configurationzones" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-cogs"></i><span class="hidden-xs"> {{Configuration des Zones}}</span></a></li>
-			<li role="presentation"><a href="#commandtab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-list"></i><span class="hidden-xs"> {{Commandes}}</span></a></li>
+            <?php
+                try {
+                    $pluginCalendar = plugin::byId('calendar');
+                    if (is_object($pluginCalendar)) {
+                        ?>
+                            <li role="presentation"><a href="#configureSchedule" aria-controls="home" role="tab" data-toggle="tab"><i class="far fa-clock"></i><span class="hidden-xs"> {{Programmation}}</span></a></li>
+                        <?php
+                    }
+                } catch (Exception $e) {
+                }
+            ?>
+            <li role="presentation"><a href="#commandtab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-list"></i><span class="hidden-xs"> {{Commandes}}</span></a></li>
 		</ul>
 		<div class="tab-content">
 			<div role="tabpanel" class="tab-pane active" id="eqlogictab">
@@ -194,6 +205,13 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 ?>
                             </div>
                         </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="tab-pane" id="configureSchedule">
+                <form class="form-horizontal">
+                    <fieldset style="margin-top: 10px">
+                        <div id="div_schedule"></div>
                     </fieldset>
                 </form>
             </div>
