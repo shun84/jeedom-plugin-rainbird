@@ -264,7 +264,7 @@ class rainbird extends eqLogic {
         } else {
             if (exec(system::getCmdSudo() . system::get('cmd_check') . '-Ec "python3\-pip|python3\-setuptools"') < 2) {
                 $return['state'] = 'nok';
-            } elseif (exec(system::getCmdSudo() . 'pip3 list | grep -Ewc "setuptools|pycryptodomex|requests|datetime"') < 3) {
+            } elseif (exec(system::getCmdSudo() . 'pip3 list | grep -Ewc "pycryptodome|requests|DateTime|PyYAML|setuptools"') < 5) {
                 $return['state'] = 'nok';
             } else {
                 $return['state'] = 'ok';
