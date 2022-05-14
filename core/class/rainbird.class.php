@@ -459,14 +459,6 @@ class rainbirdCmd extends cmd {
      */
     public function execute($_options = []) {
         $apirainbird = new rainbirdApi($this->getEqLogic()->getConfiguration('iprainbird'), $this->getEqLogic()->getConfiguration('mdprainbird'));
-        $lol = [];
-        foreach ($apirainbird->get_current_date() as $test){
-            $lol[] = $test;
-        }
-        $pop = $lol;
-
-        log::add('rainbird','debug',$pop);
-
         if ($apirainbird->get_current_date()[0] == 'None'){
             throw new Exception(__('Vérifier votre login et mot de passe ou l\'application rainbird lancé sur votre Téléphone', __FILE__));
         }

@@ -4,6 +4,9 @@
 >
 >Pour rappel s'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte.
 
+# 14/05/2022
+- Rajout le lien entre le plugin rainbird et agenda
+
 # 13/05/2022
 - Otpimisation des dépendances
 
