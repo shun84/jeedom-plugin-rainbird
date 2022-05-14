@@ -95,3 +95,52 @@ function addCmdToTable(_cmd) {
 $('#bt_resetObjectSearch').on('click', function() {
     $('#in_searchEqlogic').val('').keyup()
 })
+
+function printEqLogic(_eqLogic) {
+    printScheduling(_eqLogic);
+}
+
+function printScheduling(_eqLogic){
+    $.ajax({
+        type: 'POST',
+        url: 'plugins/rainbird/core/ajax/rainbird.ajax.php',
+        data: {
+            action: 'getLinkCalendar',
+            id: _eqLogic.id
+        },
+        dataType: 'json',
+        error: function (request, status, error) {
+            handleAjaxError(request, status, error);
+        },
+        success: function (data) {
+            let divschedule = $('#div_schedule');
+            if (data.state !== 'ok') {
+                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                return;
+            }
+            divschedule.empty();
+            if(data.result.length === 0){
+                divschedule.append('<div class="col-xs-10 col-xs-offset-1 alert alert-warning">{{Aucune programmation trouvée. Cliquer sur le bouton ci-après pour programmer le rainbird à l\'aide du}} <a class="btn btn-sm" href="index.php?v=d&m=calendar&p=calendar">{{plugin Agenda}}</a></div>');
+            }else{
+                let html = '<legend><i class="fas fa-external-link-alt"></i> {{Programmations du plugin Agenda liées au rainbird}} :</legend><hr>';
+                for (let i in data.result) {
+                    let cmdparam = data.result[i].cmd_param;
+                    let color = init(cmdparam.color, '#2980b9');
+                    if(cmdparam.transparent === 1){
+                        color = 'transparent';
+                    }
+                    html += '<span class="label cursor" style="font-size:1.2em!important;margin-left:20px;background-color : ' + color + ';color : ' + init(cmdparam.text_color, 'black') + '">';
+                    html += '<a href="index.php?v=d&m=calendar&p=calendar&id='+data.result[i].eqLogic_id+'&event_id='+data.result[i].id+'" style="color : ' + init(cmdparam.text_color, 'black') + '">'
+
+                    if (cmdparam.eventName !== '') {
+                        html += cmdparam.icon + ' ' + cmdparam.eventName;
+                    } else {
+                        html += cmdparam.icon + ' ' + cmdparam.name;
+                    }
+                    html += '</a></span><hr>';
+                }
+                $('#div_schedule').empty().append(html);
+            }
+        }
+    });
+}

@@ -2,6 +2,7 @@
 
 # Vérification pour le bon fonctionnement du plugin et du contrôleur RainBird
 - Le module WiFi RainBird ne doit pas être sur le **Channel 13** de votre wifi.
+- Définissez une adresse IP statique pour votre contrôleur **RainBird** via votre Box / Routeur
 - L'utilisation de l'application RainBird via le mobile en cours d'exécution peut entraîner des problèmes de connectivité
 
 # Plugin RainBird
@@ -14,9 +15,24 @@ Il vous faut à tout prit le **WIFI Link** : https://wifi.rainbird.com/
 
 Après avoir activé le plugin, vérifier que les dépendences sont ok, si c'est pas le cas les installer.
 
-1. Définissez une adresse IP statique pour votre contrôleur **RainBird** via votre Box / Routeur
-2. Puis créer votre objet avec l'adresse **IP** et le **Mot de passe** et sélectionner le nombre de zones que vous avez et sauvegarder.
+Puis créer votre objet avec l'adresse **IP** et le **Mot de passe** et sélectionner le nombre de zones que vous avez et sauvegarder.
+
+![img_2.png](../images/equipement.png)
+
+# Configuration des zones
 
 Rendez-vous sur l'onglet **Configuration des zones** pour saisir la durée pour chaque zone et le nom si besoin.
 
-Actuellement pour programmer vos arrosages, c'est d'utiliser pour l'instant par **Scénario**.
+![Configuration zones](../images/configuration-zones.png)
+
+# Configuration des zones lier au plugin Agenda
+
+Si le plugin **Agenda**, est activé sinon on n'a pas l'onglet **Programmation des Zones**
+
+![Agenda](../images/agenda-1.png)
+
+Cliquer sur **plugin Agenda** pour pouvoir saisir l'agenda en lien avec la zone à arroser
+
+Après avoir créer l'agenda voici un exemple ci-dessous :
+
+![Agenda](../images/agenda-2.png)
