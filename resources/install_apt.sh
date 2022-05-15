@@ -9,6 +9,8 @@ echo "*************************************"
 echo "*   Launch install of dependencies  *"
 echo "*************************************"
 echo $(date)
+echo "Version de Python 3 installée :"
+sudo python3 --version
 echo 5 > ${PROGRESS_FILE}
 sudo apt-get clean
 echo 10 > ${PROGRESS_FILE}
@@ -28,6 +30,10 @@ echo "*************************************"
 echo "Install the required python libraries"
 echo "*************************************"
 sudo apt-get remove -y python3-crypto
+echo 50 > ${PROGRESS_FILE}
+sudo python3 -m pip uninstall -y pycryptodome
+echo 52 > ${PROGRESS_FILE}
+sudo python3 -m pip uninstall -y pycrypto
 echo 55 > ${PROGRESS_FILE}
 sudo python3 -m pip uninstall -y pycryptodomex
 echo 58 > ${PROGRESS_FILE}
