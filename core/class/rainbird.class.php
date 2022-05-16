@@ -164,6 +164,10 @@ class rainbird extends eqLogic {
         if ($this->getConfiguration('nbzone') > "4" && $this->getConfiguration('nbzone') < "9"){
             $this->setDisplay("height","325px");
         }
+
+        if ($this->getConfiguration('nbzone') > "8" && $this->getConfiguration('nbzone') < "13"){
+            $this->setDisplay("height","430px");
+        }
     }
 
     /**
@@ -304,7 +308,7 @@ class rainbird extends eqLogic {
         $stopzone = $this->getCmd(null, 'zonestop'.$i);
         $replacezone['#zonestop#'] = is_object($stopzone) ? $stopzone->getId() : '';
 
-        return template_replace($replacezone, getTemplate('core', $version, 'zone', __CLASS__));;
+        return template_replace($replacezone, getTemplate('core', $version, 'zone', __CLASS__));
     }
 
     /**
@@ -352,70 +356,136 @@ class rainbird extends eqLogic {
 
         $getnbzone = $this->getConfiguration('nbzone');
 
+        $classandleft = '<div class="col-md-6" style="float: left">';
+        $closediv = '</div>';
+
         if ($version === 'mobile'){
             if ($getnbzone < "3"){
                 $replace['#height#'] = '390px';
                 for ($i = 1; $i <= $getnbzone; $i++){
-                    $replace['#zone#'] .= '<div class="col-md-6" style="float: left">';
+                    $replace['#zone#'] .= $classandleft;
                         $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= '</div>';
+                    $replace['#zone#'] .= $closediv;
                 }
             }
 
             if ($getnbzone > "2" && $getnbzone < "5"){
                 $replace['#height#'] = '515px';
                 for ($i = 1; $i <= 2; $i++){
-                    $replace['#zone#'] .= '<div class="col-md-6" style="float: left">';
+                    $replace['#zone#'] .= $classandleft;
                         $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= '</div>';
+                    $replace['#zone#'] .= $closediv;
                 }
                 for ($i = 3; $i <= $getnbzone; $i++){
-                    $replace['#zone#'] .= '<div class="col-md-6" style="float: left">';
+                    $replace['#zone#'] .= $classandleft;
                         $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= '</div>';
+                    $replace['#zone#'] .= $closediv;
                 }
             }
 
             if ($getnbzone > "4" && $getnbzone < "7"){
                 $replace['#height#'] = '625px';
                 for ($i = 1; $i <= 2; $i++){
-                    $replace['#zone#'] .= '<div class="col-md-6" style="float: left">';
+                    $replace['#zone#'] .= $classandleft;
                         $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= '</div>';
+                    $replace['#zone#'] .= $closediv;
                 }
                 for ($i = 3; $i <= 4; $i++){
-                    $replace['#zone#'] .= '<div class="col-md-6" style="float: left">';
+                    $replace['#zone#'] .= $classandleft;
                         $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= '</div>';
+                    $replace['#zone#'] .= $closediv;
                 }
                 for ($i = 5; $i <= $getnbzone; $i++){
-                    $replace['#zone#'] .= '<div class="col-md-6" style="float: left">';
+                    $replace['#zone#'] .= $classandleft;
                         $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= '</div>';
+                    $replace['#zone#'] .= $closediv;
                 }
             }
 
             if ($getnbzone > "6" && $getnbzone < "9"){
                 $replace['#height#'] = '755px';
                 for ($i = 1; $i <= 2; $i++){
-                    $replace['#zone#'] .= '<div class="col-md-6" style="float: left">';
+                    $replace['#zone#'] .= $classandleft;
                         $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= '</div>';
+                    $replace['#zone#'] .= $closediv;
                 }
                 for ($i = 3; $i <= 4; $i++){
-                    $replace['#zone#'] .= '<div class="col-md-6" style="float: left">';
+                    $replace['#zone#'] .= $classandleft;
                         $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= '</div>';
+                    $replace['#zone#'] .= $closediv;
                 }
                 for ($i = 5; $i <= 6; $i++){
-                    $replace['#zone#'] .= '<div class="col-md-6" style="float: left">';
+                    $replace['#zone#'] .= $classandleft;
                         $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= '</div>';
+                    $replace['#zone#'] .= $closediv;
                 }
                 for ($i = 7; $i <= $getnbzone; $i++){
-                    $replace['#zone#'] .= '<div class="col-md-6" style="float: left">';
+                    $replace['#zone#'] .= $classandleft;
                         $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= '</div>';
+                    $replace['#zone#'] .= $closediv;
+                }
+            }
+
+            if ($getnbzone > "8" && $getnbzone < "11") {
+                $replace['#height#'] = '885px';
+                for ($i = 1; $i <= 2; $i++) {
+                    $replace['#zone#'] .= $classandleft;
+                    $replace['#zone#'] .= $this->zoneHtml($i, $version);
+                    $replace['#zone#'] .= $closediv;
+                }
+                for ($i = 3; $i <= 4; $i++) {
+                    $replace['#zone#'] .= $classandleft;
+                    $replace['#zone#'] .= $this->zoneHtml($i, $version);
+                    $replace['#zone#'] .= $closediv;
+                }
+                for ($i = 5; $i <= 6; $i++) {
+                    $replace['#zone#'] .= $classandleft;
+                    $replace['#zone#'] .= $this->zoneHtml($i, $version);
+                    $replace['#zone#'] .= $closediv;
+                }
+                for ($i = 7; $i <= 8; $i++) {
+                    $replace['#zone#'] .= $classandleft;
+                    $replace['#zone#'] .= $this->zoneHtml($i, $version);
+                    $replace['#zone#'] .= $closediv;
+                }
+                for ($i = 9; $i <= $getnbzone; $i++) {
+                    $replace['#zone#'] .= $classandleft;
+                    $replace['#zone#'] .= $this->zoneHtml($i, $version);
+                    $replace['#zone#'] .= $closediv;
+                }
+            }
+
+            if ($getnbzone > "10" && $getnbzone < "13"){
+                $replace['#height#'] = '995px';
+                for ($i = 1; $i <= 2; $i++){
+                    $replace['#zone#'] .= $classandleft;
+                    $replace['#zone#'] .= $this->zoneHtml($i,$version);
+                    $replace['#zone#'] .= $closediv;
+                }
+                for ($i = 3; $i <= 4; $i++){
+                    $replace['#zone#'] .= $classandleft;
+                    $replace['#zone#'] .= $this->zoneHtml($i,$version);
+                    $replace['#zone#'] .= $closediv;
+                }
+                for ($i = 5; $i <= 6; $i++){
+                    $replace['#zone#'] .= $classandleft;
+                    $replace['#zone#'] .= $this->zoneHtml($i,$version);
+                    $replace['#zone#'] .= $closediv;
+                }
+                for ($i = 7; $i <= 8; $i++){
+                    $replace['#zone#'] .= $classandleft;
+                    $replace['#zone#'] .= $this->zoneHtml($i,$version);
+                    $replace['#zone#'] .= $closediv;
+                }
+                for ($i = 9; $i <= 10; $i++){
+                    $replace['#zone#'] .= $classandleft;
+                    $replace['#zone#'] .= $this->zoneHtml($i,$version);
+                    $replace['#zone#'] .= $closediv;
+                }
+                for ($i = 11; $i <= $getnbzone; $i++){
+                    $replace['#zone#'] .= $classandleft;
+                    $replace['#zone#'] .= $this->zoneHtml($i,$version);
+                    $replace['#zone#'] .= $closediv;
                 }
             }
         }else{
@@ -424,20 +494,38 @@ class rainbird extends eqLogic {
                     for ($i = 1; $i <= $getnbzone; $i++){
                         $replace['#zone#'] .= $this->zoneHtml($i,$version);
                     }
-                $replace['#zone#'] .= '</div>';
+                $replace['#zone#'] .= $closediv;
             }
 
-            if ($getnbzone> "4" && $getnbzone < "9"){
+            if ($getnbzone > "4" && $getnbzone < "9"){
                 $replace['#zone#'] .= '<div style="margin-top: 10px; height: 100px">';
                     for ($i = 1; $i <= 4; $i++){
                         $replace['#zone#'] .= $this->zoneHtml($i,$version);
                     }
-                $replace['#zone#'] .= '</div>';
+                $replace['#zone#'] .= $closediv;
                 $replace['#zone#'] .= '<div style="margin-top: 10px; height: 100px">';
                     for ($i = 5; $i <= $getnbzone; $i++){
                         $replace['#zone#'] .= $this->zoneHtml($i,$version);
                     }
-                $replace['#zone#'] .= '</div>';
+                $replace['#zone#'] .= $closediv;
+            }
+
+            if ($getnbzone > "8" && $getnbzone < "13"){
+                $replace['#zone#'] .= '<div style="margin-top: 10px; height: 100px">';
+                for ($i = 1; $i <= 4; $i++){
+                    $replace['#zone#'] .= $this->zoneHtml($i,$version);
+                }
+                $replace['#zone#'] .= $closediv;
+                $replace['#zone#'] .= '<div style="margin-top: 10px; height: 100px">';
+                for ($i = 5; $i <= 8; $i++){
+                    $replace['#zone#'] .= $this->zoneHtml($i,$version);
+                }
+                $replace['#zone#'] .= $closediv;
+                $replace['#zone#'] .= '<div style="margin-top: 10px; height: 100px">';
+                for ($i = 9; $i <= $getnbzone; $i++){
+                    $replace['#zone#'] .= $this->zoneHtml($i,$version);
+                }
+                $replace['#zone#'] .= $closediv;
             }
         }
 

@@ -144,7 +144,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <select id="nbzone" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="nbzone">
                                         <option></option>
                                         <?php
-                                            for ($i = 1; $i <= 8; $i++) {
+                                            for ($i = 1; $i <= 12; $i++) {
                                                 echo '<option value="'.$i.'">Zone '.$i.'</option>';
                                             }
                                         ?>

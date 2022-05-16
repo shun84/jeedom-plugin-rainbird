@@ -4,6 +4,9 @@
 >
 >Pour rappel s'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte.
 
+# 16/05/2022
+- Rajout de 4 zones pour les appareils à 12 zones comme le **Esp-tm2**
+
 # 14/05/2022
 - Rajout le lien entre le plugin rainbird et agenda
 
