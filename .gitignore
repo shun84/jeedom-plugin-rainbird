@@ -12,4 +12,4 @@ docs/Gemfile.lock
 docs/.sass-cache/
 .remote-sync.json
 resources/pypython.log
-resources/pyrainbird/env/
+resources/pyrainbird/env/*
