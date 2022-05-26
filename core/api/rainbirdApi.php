@@ -17,58 +17,74 @@ class rainbirdApi
     }
 
     public function get_current_date(){
-        $cmd = 'cd ' . $this->getResourcePath() . ' && python3 get_current_date.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '"';
+        exec('cd ' . $this->getResourcePath() . '/pyrainbird && source /env/bin/activate');
+        $cmd = 'cd '. $this->getResourcePath() .' && python3 get_current_date.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '"';
         exec($cmd . ' 2>&1', $output);
+        exec('cd ' . $this->getResourcePath() . '/pyrainbird && deactivate');
 
         return $output;
     }
 
     public function get_current_time(){
+        exec('cd ' . $this->getResourcePath() . '/pyrainbird && source /env/bin/activate');
         $cmd = 'cd ' . $this->getResourcePath() . ' && python3 get_current_time.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '"';
         exec($cmd . ' 2>&1', $output);
+        exec('cd ' . $this->getResourcePath() . '/pyrainbird && deactivate');
 
         return $output;
     }
 
 
     public function test_zone(int $zone){
+        exec('cd ' . $this->getResourcePath() . '/pyrainbird && source /env/bin/activate');
         $cmd = 'cd ' . $this->getResourcePath() . ' && python3 test_zone.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '" "'.$zone.'"';
         exec($cmd . ' 2>&1', $output);
+        exec('cd ' . $this->getResourcePath() . '/pyrainbird && deactivate');
 
         return $output;
     }
 
     public function stop_irrigation(){
+        exec('cd ' . $this->getResourcePath() . '/pyrainbird && source /env/bin/activate');
         $cmd = 'cd ' . $this->getResourcePath() . ' && python3 stop_irrigation.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '"';
         exec($cmd . ' 2>&1', $output);
+        exec('cd ' . $this->getResourcePath() . '/pyrainbird && deactivate');
 
         return $output;
     }
 
     public function irrigate_zone(int $zone, int $timer){
-        $cmd = 'cd ' . $this->getResourcePath() . ' && python3 irrigate_zone.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '" '.$zone.' '.$timer.'';
+        exec('cd ' . $this->getResourcePath() . '/pyrainbird && source /env/bin/activate');
+        $cmd = 'cd ' . $this->getResourcePath() . ' && python3 irrigate_zone.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '" "'.$zone.'" "'.$timer.'"';
         exec($cmd . ' 2>&1', $output);
+        exec('cd ' . $this->getResourcePath() . '/pyrainbird && deactivate');
 
         return $output;
     }
 
     public function get_rain_delay(){
+        exec('cd ' . $this->getResourcePath() . '/pyrainbird && source /env/bin/activate');
         $cmd = 'cd ' . $this->getResourcePath() . ' && python3 get_rain_delay.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '"';
         exec($cmd . ' 2>&1', $output);
+        exec('cd ' . $this->getResourcePath() . '/pyrainbird && deactivate');
 
         return $output;
     }
 
     public function set_rain_delay(string $days){
+        exec('cd ' . $this->getResourcePath() . '/pyrainbird && source /env/bin/activate');
         $cmd = 'cd ' . $this->getResourcePath() . ' && python3 set_rain_delay.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '" "'.$days.'"';
         exec($cmd . ' 2>&1', $output);
+        exec('cd ' . $this->getResourcePath() . '/pyrainbird && deactivate');
 
         return $output;
     }
 
     public function get_zone_state(int $zone){
-        $cmd = 'cd ' . $this->getResourcePath() . ' && python3 get_zone_state.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '" '.$zone.'';
+        exec('cd ' . $this->getResourcePath() . '/pyrainbird && source /env/bin/activate');
+        $cmd = 'cd ' . $this->getResourcePath() . ' && python3 get_zone_state.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '" '.$zone;
         exec($cmd . ' 2>&1', $output);
+        exec('cd ' . $this->getResourcePath() . '/pyrainbird && deactivate');
 
         return $output;
     }

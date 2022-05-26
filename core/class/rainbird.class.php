@@ -266,10 +266,10 @@ class rainbird extends eqLogic {
         if (file_exists(jeedom::getTmpFolder(__CLASS__).'/dependency')) {
             $return['state'] = 'in_progress';
         } else {
-            if (exec(system::getCmdSudo() . system::get('cmd_check') . '-Ec "python3\-pip|python3\-setuptools"') < 2) {
+            if (exec(system::getCmdSudo() . system::get('cmd_check') . '-Ec "python3\-venv"') < 1) {
                 $return['state'] = 'nok';
-            } elseif (exec(system::getCmdSudo() . 'pip3 list | grep -Ewc "pycryptodome|requests|DateTime|PyYAML|setuptools"') < 5) {
-                $return['state'] = 'nok';
+//            } elseif (exec(system::getCmdSudo() . 'pip3 list | grep -Ewc "pycryptodome|requests|DateTime|PyYAML|setuptools"') < 5) {
+//                $return['state'] = 'nok';
             } else {
                 $return['state'] = 'ok';
             }
