@@ -34,16 +34,18 @@ echo "Install the required python libraries"
 echo "*************************************"
 source env/bin/activate
 pip3 install pycryptodome
+echo 58 > ${PROGRESS_FILE}
+pip3 install pycrypto
 echo 60 > ${PROGRESS_FILE}
-pip3 install requests
+pip3 install requests~=2.22.0
 echo 72 > ${PROGRESS_FILE}
-pip3 install DateTime
+pip3 install DateTime~=4.3
 echo 84 > ${PROGRESS_FILE}
-pip3 install PyYAML
+pip3 install PyYAML>=5.4
 echo 86 > ${PROGRESS_FILE}
-pip3 install setuptools
+pip3 install setuptools~=56.0.0
 echo 88 > ${PROGRESS_FILE}
-sudo apt-get install -y python3-crypto
+sudo apt-get remove -y python3-crypto
 echo 90 > ${PROGRESS_FILE}
 deactivate
 

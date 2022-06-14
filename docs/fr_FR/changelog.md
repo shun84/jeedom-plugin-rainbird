@@ -3,6 +3,8 @@
 >**IMPORTANT**
 >
 >Pour rappel s'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte.
+# 14/06/2022
+- Fix bug de la vrai mise en place de l'environnement virtuel de Python
 
 # 25/05/2022
 - Modification des dépendances en utilisant les environnements virtuel de python pour pas interférer avec d'autres plugins de jeedom

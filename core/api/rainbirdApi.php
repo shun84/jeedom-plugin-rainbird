@@ -17,74 +17,57 @@ class rainbirdApi
     }
 
     public function get_current_date(){
-        exec('cd ' . $this->getResourcePath() . '/pyrainbird && source /env/bin/activate');
-        $cmd = 'cd '. $this->getResourcePath() .' && python3 get_current_date.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '"';
+        $cmd = $this->getResourcePath() .'/pyrainbird/env/bin/python3 ' . $this->getResourcePath(). '/get_current_date.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '"';
         exec($cmd . ' 2>&1', $output);
-        exec('cd ' . $this->getResourcePath() . '/pyrainbird && deactivate');
 
         return $output;
     }
 
     public function get_current_time(){
-        exec('cd ' . $this->getResourcePath() . '/pyrainbird && source /env/bin/activate');
-        $cmd = 'cd ' . $this->getResourcePath() . ' && python3 get_current_time.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '"';
+        $cmd = $this->getResourcePath() .'/pyrainbird/env/bin/python3 ' . $this->getResourcePath(). '/get_current_time.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '"';
         exec($cmd . ' 2>&1', $output);
-        exec('cd ' . $this->getResourcePath() . '/pyrainbird && deactivate');
 
         return $output;
     }
 
-
     public function test_zone(int $zone){
-        exec('cd ' . $this->getResourcePath() . '/pyrainbird && source /env/bin/activate');
-        $cmd = 'cd ' . $this->getResourcePath() . ' && python3 test_zone.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '" "'.$zone.'"';
+        $cmd = $this->getResourcePath() .'/pyrainbird/env/bin/python3 ' . $this->getResourcePath(). '/test_zone.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '" "'.$zone.'"';
         exec($cmd . ' 2>&1', $output);
-        exec('cd ' . $this->getResourcePath() . '/pyrainbird && deactivate');
 
         return $output;
     }
 
     public function stop_irrigation(){
-        exec('cd ' . $this->getResourcePath() . '/pyrainbird && source /env/bin/activate');
-        $cmd = 'cd ' . $this->getResourcePath() . ' && python3 stop_irrigation.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '"';
+        $cmd = $this->getResourcePath() .'/pyrainbird/env/bin/python3 ' . $this->getResourcePath(). '/stop_irrigation.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '"';
         exec($cmd . ' 2>&1', $output);
-        exec('cd ' . $this->getResourcePath() . '/pyrainbird && deactivate');
 
         return $output;
     }
 
     public function irrigate_zone(int $zone, int $timer){
-        exec('cd ' . $this->getResourcePath() . '/pyrainbird && source /env/bin/activate');
-        $cmd = 'cd ' . $this->getResourcePath() . ' && python3 irrigate_zone.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '" "'.$zone.'" "'.$timer.'"';
+        $cmd = $this->getResourcePath() .'/pyrainbird/env/bin/python3 ' . $this->getResourcePath(). '/irrigate_zone.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '" "'.$zone.'" "'.$timer.'"';
         exec($cmd . ' 2>&1', $output);
-        exec('cd ' . $this->getResourcePath() . '/pyrainbird && deactivate');
 
         return $output;
     }
 
     public function get_rain_delay(){
-        exec('cd ' . $this->getResourcePath() . '/pyrainbird && source /env/bin/activate');
-        $cmd = 'cd ' . $this->getResourcePath() . ' && python3 get_rain_delay.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '"';
+        $cmd = $this->getResourcePath() .'/pyrainbird/env/bin/python3 ' . $this->getResourcePath(). '/get_rain_delay.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '"';
         exec($cmd . ' 2>&1', $output);
-        exec('cd ' . $this->getResourcePath() . '/pyrainbird && deactivate');
 
         return $output;
     }
 
     public function set_rain_delay(string $days){
-        exec('cd ' . $this->getResourcePath() . '/pyrainbird && source /env/bin/activate');
-        $cmd = 'cd ' . $this->getResourcePath() . ' && python3 set_rain_delay.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '" "'.$days.'"';
+        $cmd = $this->getResourcePath() .'/pyrainbird/env/bin/python3 ' . $this->getResourcePath(). '/set_rain_delay.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '" "'.$days.'"';
         exec($cmd . ' 2>&1', $output);
-        exec('cd ' . $this->getResourcePath() . '/pyrainbird && deactivate');
 
         return $output;
     }
 
     public function get_zone_state(int $zone){
-        exec('cd ' . $this->getResourcePath() . '/pyrainbird && source /env/bin/activate');
-        $cmd = 'cd ' . $this->getResourcePath() . ' && python3 get_zone_state.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '" '.$zone;
+        $cmd = $this->getResourcePath() .'/pyrainbird/env/bin/python3 ' . $this->getResourcePath(). '/get_zone_state.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '" '.$zone;
         exec($cmd . ' 2>&1', $output);
-        exec('cd ' . $this->getResourcePath() . '/pyrainbird && deactivate');
 
         return $output;
     }
