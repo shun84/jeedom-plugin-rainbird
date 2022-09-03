@@ -22,6 +22,9 @@ echo 20 > ${PROGRESS_FILE}
 echo "*****************************"
 echo "Install modules using apt-get"
 echo "*****************************"
+cd ${BASEDIR}
+rm -r pyrainbird
+git clone https://github.com/jbarrancos/pyrainbird.git pyrainbird
 cd ${BASEDIR}/pyrainbird
 rm -r env
 sudo apt-get install -y python3-venv

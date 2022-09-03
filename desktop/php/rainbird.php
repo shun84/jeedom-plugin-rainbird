@@ -144,8 +144,10 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <select id="nbzone" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="nbzone">
                                         <option></option>
                                         <?php
-                                            for ($i = 1; $i <= 12; $i++) {
-                                                echo '<option value="'.$i.'">Zone '.$i.'</option>';
+                                            foreach ($eqLogics as $eqLogic){
+                                                for ($i = 1; $i <= $eqLogic->getConfiguration('nbzone'); $i++) {
+                                                    echo '<option value="'.$i.'">Zone '.$i.'</option>';
+                                                }
                                             }
                                         ?>
                                     </select>
@@ -154,7 +156,17 @@ $eqLogics = eqLogic::byType($plugin->getId());
 						</div>
 						<div class="col-lg-5">
 							<legend><i class="fas fa-info"></i> {{Informations}}</legend>
-							<div class="form-group">
+                            <?php
+                                foreach ($eqLogics as $eqLogic){
+                                    echo '<label>Model</label>';
+                                    echo '<input type="text" class="form-control" value="'.$eqLogic->getConfiguration('model').'" data-l1key="configuration" data-l2key="model" readonly>';
+                                    echo '<label>Version</label>';
+                                    echo '<input type="text" class="form-control" value="'.$eqLogic->getConfiguration('version').'" data-l1key="configuration" data-l2key="version" readonly>';
+                                    echo '<label>No Serial (Si un ESP-RZXe = 0)</label>';
+                                    echo '<input type="text" class="form-control" value="'.$eqLogic->getConfiguration('serial').'" data-l1key="configuration" data-l2key="serial" readonly>';
+                                }
+                            ?>
+                            <div class="form-group">
 								<div class="text-center">
 									<img name="icon_visu" src="<?= $plugin->getPathImgIcon(); ?>" style="max-width:160px;"/>
 								</div>

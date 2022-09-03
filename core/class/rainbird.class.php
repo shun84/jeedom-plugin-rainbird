@@ -23,7 +23,6 @@ require_once __DIR__ . '/../../core/api/rainbirdApi.php';
 class rainbird extends eqLogic {
 	public static $_widgetPossibility = array('custom' => true, 'custom::layout' => false);
 
-
     /* ***********************Methode static*************************** */
     public static function cron() {
         foreach (rainbird::byType('rainbird') as $eqLogic) {
@@ -92,6 +91,18 @@ class rainbird extends eqLogic {
         if ($this->getConfiguration('nbzone') === '') {
             throw new Exception(__('Veuillez sélectionner le nombre de zone du rainbird', __FILE__));
         }
+
+        $apirainbird = new rainbirdApi($this->getConfiguration('iprainbird'), $this->getConfiguration('mdprainbird'));
+
+        $availablestations = $apirainbird->get_available_stations();
+
+        $getserialnumber = $apirainbird->get_serial_number();
+
+        $modelandversion = $apirainbird->get_model_and_version();
+
+        $this->setConfiguration('model',$modelandversion[0]);
+        $this->setConfiguration('version',$modelandversion[1]);
+        $this->setConfiguration('serial',$getserialnumber[0]);
     }
 
     /**
@@ -101,29 +112,30 @@ class rainbird extends eqLogic {
      */
     public function postUpdate() {
         for ($i = 1; $i <= $this->getConfiguration('nbzone'); $i++){
-            $zonelancer = $this->getCmd(null, 'zonelancer'.$i);
-            if (!is_object($zonelancer)) {
-                $zonelancer = new rainbirdCmd();
-            }
-            $zonelancer->setName(__('Zone Lancer '.$i, __FILE__));
-            $zonelancer->setLogicalId('zonelancer'.$i);
-            $zonelancer->setEqLogic_id($this->getId());
-            $zonelancer->setType('action');
-            $zonelancer->setSubType('other');
-            $zonelancer->setGeneric_type('RAINBIRD_STARTRAIN');
-            $zonelancer->save();
-
             $getzonelancer = $this->getCmd(null, 'getzonelancer'.$i);
             if (!is_object($getzonelancer)) {
                 $getzonelancer = new rainbirdCmd();
             }
-            $getzonelancer->setName(__('Récupération Zone '.$i, __FILE__));
+            $getzonelancer->setName(__('Zone '.$i, __FILE__));
             $getzonelancer->setLogicalId('getzonelancer'.$i);
             $getzonelancer->setEqLogic_id($this->getId());
             $getzonelancer->setType('info');
             $getzonelancer->setSubType('binary');
-            $getzonelancer->setGeneric_type('RAINBIRD_GETRAIN');
+//            $getzonelancer->setGeneric_type('RAINBIRD_GETRAIN');
             $getzonelancer->save();
+
+            $zonelancer = $this->getCmd(null, 'zonelancer'.$i);
+            if (!is_object($zonelancer)) {
+                $zonelancer = new rainbirdCmd();
+            }
+            $zonelancer->setName(__('Lancer la zone '.$i, __FILE__));
+            $zonelancer->setLogicalId('zonelancer'.$i);
+            $zonelancer->setEqLogic_id($this->getId());
+            $zonelancer->setType('action');
+            $zonelancer->setSubType('other');
+//            $zonelancer->setGeneric_type('RAINBIRD_STARTRAIN');
+            $zonelancer->setValue($getzonelancer->getId());
+            $zonelancer->save();
 
             $zonestop = $this->getCmd(null, 'zonestop'.$i);
             if (!is_object($zonestop)) {
@@ -134,7 +146,8 @@ class rainbird extends eqLogic {
             $zonestop->setEqLogic_id($this->getId());
             $zonestop->setType('action');
             $zonestop->setSubType('other');
-            $zonestop->setGeneric_type('RAINBIRD_STOPRAIN');
+//            $zonestop->setGeneric_type('RAINBIRD_STOPRAIN');
+            $zonestop->setValue($getzonelancer->getId());
             $zonestop->save();
         }
     }
@@ -284,6 +297,52 @@ class rainbird extends eqLogic {
     {
         log::remove(__CLASS__ . '_update');
         return array('script' => dirname(__FILE__) . '/../../resources/install_#stype#.sh ' . jeedom::getTmpFolder(__CLASS__).'/dependency', 'log' => log::getPathToLog(__CLASS__.'_update'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function stopIrrigationVsAgenda(eqLogic $eqLogic){
+        $apirainbird = new rainbirdApi($eqLogic->getConfiguration('iprainbird'), $eqLogic->getConfiguration('mdprainbird'));
+        $plugincalendar = plugin::byId('calendar');
+
+        try {
+            if (!is_object($plugincalendar) || $plugincalendar->isActive() != 1) {
+                ajax::success([]);
+            }
+        } catch (Exception $e) {
+            ajax::success([]);
+        }
+
+        if ($apirainbird->get_rain_delay()[0] != 0){
+            for ($i = 1; $i <= $eqLogic->getConfiguration('nbzone'); $i++){
+                $rainbird_cmd = $eqLogic->getCmd(null, 'zonelancer'.$i);
+                if (is_object($rainbird_cmd)) {
+                    foreach (calendar_event::searchByCmd($rainbird_cmd->getId()) as $event){
+                        $test = $plugincalendar->getId();
+                    }
+                }
+            }
+        } else {
+            for ($i = 1; $i <= $eqLogic->getConfiguration('nbzone'); $i++){
+                $rainbird_cmd = $eqLogic->getCmd(null, 'zonelancer'.$i);
+                if (is_object($rainbird_cmd)) {
+                    foreach (calendar_event::searchByCmd($rainbird_cmd->getId()) as $event) {
+
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function stopIrrigationPlay(eqLogic $eqLogic){
+        $apirainbird = new rainbirdApi($eqLogic->getConfiguration('iprainbird'), $eqLogic->getConfiguration('mdprainbird'));
+        if ($apirainbird->get_rain_delay()[0] != 0){
+            throw new Exception(__('L\'arrossage est arrêté', __FILE__));
+        }
     }
 
     public function zoneHtml(int $i, string $version): string
@@ -553,6 +612,7 @@ class rainbirdCmd extends cmd {
 
         for ($i = 1; $i <= $this->getEqLogic()->getConfiguration('nbzone'); $i++){
             if ($this->getLogicalId() === 'zonelancer'.$i){
+                rainbird::stopIrrigationPlay($this->getEqLogic());
                 $getintzonelancer = (int) substr($this->getLogicalId(), -1); // Récupération du dernier chiffre de la zone
                 if ($getintzonelancer === 0){
                     $getintzonelancer = (int) substr($this->getLogicalId(), -2);
@@ -583,10 +643,12 @@ class rainbirdCmd extends cmd {
             $getvaleurslider = $_options['slider'];
             $apirainbird->set_rain_delay($getvaleurslider);
             $this->getEqLogic()->checkAndUpdateCmd('getraindelay', $apirainbird->get_rain_delay()[0]);
+            rainbird::stopIrrigationVsAgenda($this->getEqLogic());
             log::add('rainbird','debug','Lancement de l\'action pour arreter l\'irrigation sur un nombre de jours');
         }
 
         if ($this->getLogicalId() === 'zonetest'){
+            rainbird::stopIrrigationPlay($this->getEqLogic());
             $apirainbird->test_zone($this->getEqLogic()->getConfiguration('dureetestzone'));
             log::add('rainbird','debug','Lancement de l\'action test des zones');
         }

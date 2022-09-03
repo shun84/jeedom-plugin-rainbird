@@ -11,9 +11,46 @@ class rainbirdApi
 
     public function __construct(string $iprainbird, string $mdprainbird)
     {
-        $this->setIprainbird($iprainbird);
-        $this->setMdprainbird($mdprainbird);
+        $this->iprainbird = $iprainbird;
+        $this->mdprainbird = $mdprainbird;
         $this->resource_path = realpath(dirname(__FILE__) . '/../../resources');
+    }
+
+    public function get_model_and_version(): array
+    {
+        $cmd = $this->getResourcePath() .'/pyrainbird/env/bin/python3 ' . $this->getResourcePath(). '/get_model_and_version.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '"';
+        exec($cmd . ' 2>&1', $output);
+
+        $modelandversion = explode(',',$output[0]);
+        $model = explode(':',$modelandversion[0]);
+        $version = explode(':',$modelandversion[1]);
+
+        return [$model[1],$version[1]];
+    }
+
+    public function get_available_stations(){
+        $cmd = $this->getResourcePath() .'/pyrainbird/env/bin/python3 ' . $this->getResourcePath(). '/get_available_stations.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '"';
+        exec($cmd . ' 2>&1', $output);
+
+        $availablestations = explode(',',$output[0]);
+        $stations = explode(':',$availablestations[0]);
+        $binstations = base_convert(trim($stations[1]), 16, 2);
+        $nbstation = [];
+        $i = 1;
+        foreach (str_split($binstations) as $binstation){
+            if ($binstation === '1'){
+                $nbstation[] = $i++;
+            }
+        }
+
+        return end($nbstation);
+    }
+
+    public function get_serial_number(){
+        $cmd = $this->getResourcePath() .'/pyrainbird/env/bin/python3 ' . $this->getResourcePath(). '/get_serial_number.py "' . $this->getIprainbird() . '" "' . $this->getMdprainbird() . '"';
+        exec($cmd . ' 2>&1', $output);
+
+        return $output;
     }
 
     public function get_current_date(){
@@ -77,29 +114,13 @@ class rainbirdApi
         return $this->iprainbird;
     }
 
-    public function setIprainbird(string $iprainbird)
-    {
-        $this->iprainbird = $iprainbird;
-    }
-
     public function getMdprainbird(): string
     {
         return $this->mdprainbird;
-    }
-
-    public function setMdprainbird(string $mdprainbird)
-    {
-        $this->mdprainbird = $mdprainbird;
     }
 
     public function getResourcePath(): string
     {
         return $this->resource_path;
     }
-
-    public function setResourcePath(string $resource_path)
-    {
-        $this->resource_path = $resource_path;
-    }
-
 }
