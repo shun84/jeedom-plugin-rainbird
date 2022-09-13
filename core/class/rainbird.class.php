@@ -575,13 +575,13 @@ class rainbirdCmd extends cmd {
         }
 
         if ($this->getLogicalId() === 'stopirrigation'){
-//            $test = new newApi('192.168.1.12','Niafron84Rd');
-//            $test->encrypt('{"id":1654522644,"jsonrpc":"2.0","method":"tunnelSip","params":{"data":"10","length":1}}','Niafron84Rd');
+            $test = new newApi('192.168.1.12','Niafron84Rd');
+            $test->encrypt('{"id":1654522644,"jsonrpc":"2.0","method":"tunnelSip","params":{"data":"05","length":1}}','Niafron84Rd');
 //            $test->decrypt('\xa6\xaf\xf0W/\xa8\x13#\xd5\xd3\x96\x99\xea\x8cf\xf2\x9a7\x83\x85\xea\xdd\xa8\xbbe\xa2\xda\xb9\xa0F\x8a\xe2\xa9\x1b\xb0A3L\xb3\x10\xbd\n\xa4=\xaeE\\T:<\xc9\x1c\xcflD\xe4o\x95\x1d}\xf6\x8a\xb6\xc9c\xb2\x1f\xd6[H\xa0\x06\xb8>)\x051\xcd3[\x08\x163{\xadv\xdc\xdbH`\x10\x10E:\xc6[e\xdbt\xa5l\xf3I\xf1\x87a\xc4\xe7$\xbb\xd7\x88\xb2cb\x9a\xfc"\xba8\x99\xa1\x0f\x02\xb0_+y','Niafron84Rd');
 //            $test->addPadding('{"id":1654376764,"jsonrpc":"2.0","method":"tunnelSip","params":{"data":"10","length":1}} ');
-            $apirainbird->stop_irrigation();
-            $this->getEqLogic()->checkAndUpdateCmd('getzonelancer'.$i, $apirainbird->get_zone_state($i)[0]);
-            log::add('rainbird','debug','Lancement de l\'action pour arreter l\'irrigation');
+//            $apirainbird->stop_irrigation();
+//            $this->getEqLogic()->checkAndUpdateCmd('getzonelancer'.$i, $apirainbird->get_zone_state($i)[0]);
+//            log::add('rainbird','debug','Lancement de l\'action pour arreter l\'irrigation');
         }
 
         if ($this->getLogicalId() === 'setraindelay'){

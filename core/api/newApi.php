@@ -38,9 +38,10 @@ class newApi
         $tocodedata = implode("", [$data, str_pad("",2,"\x00\x10")]);
         $str = mb_convert_encoding($this->addPadding($tocodedata), "UTF-8");
         $pop = json_encode($this->addPadding($tocodedata));
+        $iv = random_bytes(16);
         $ret = json_decode($pop);
-//        $c = utf8_encode($this->addPadding($tocodedata));
-        $c = mb_convert_encoding("\u0010\u0010", "UTF-8", "UNICODE");
+        $c = utf8_encode($this->addPadding($tocodedata));
+//        $c = mb_convert_encoding("\u0010\u0010", "UTF-8", "UNICODE");
 //        $utf8string = html_entity_decode(preg_replace("/U\+([0-9A-F]{4})/", "&#x\\1;", $this->addPadding($tocodedata)), ENT_NOQUOTES, 'UTF-8');
 
 //        $test = str_replace("\\u0000\\u0010\u0010\u0010\u0010\u0010\u0010\u0010\u0010\u0010\u0010\u0010\u0010\u0010","\x00\x10",$c);
@@ -58,6 +59,16 @@ class newApi
         }
 
         echo $Bytes;
+
+
+//        body = JSON.stringify(body);
+//        let passwordHash = crypto.createHash('sha256').update(toBytes(rb.password)).digest(),
+//        randomBytes = crypto.randomBytes(16),
+//        packedBody = toBytes(addPadding(body + "\x00\x10")),
+//        hashedBody = crypto.createHash('sha256').update(toBytes(body)).digest(),
+//        easEncryptor = new aesjs.ModeOfOperation.cbc(passwordHash, randomBytes),
+//        encryptedBody = Buffer.from(easEncryptor.encrypt(packedBody));
+//    return Buffer.concat([hashedBody, randomBytes, encryptedBody]);
     }
 
     /**
