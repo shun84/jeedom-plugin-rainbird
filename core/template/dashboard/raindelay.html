@@ -1,51 +1,42 @@
-<div class="cmd cmd-widget" data-type="action" data-subtype="slider" data-template="button" data-cmd_id="#id#" data-cmd_uid="#uid#">
-    <div class="title">
+<div class="cmd cmd-widget" data-type="action" data-subtype="slider" data-template="value" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#">
+    <div class="title" style="margin-bottom: 5px">
         <div class="cmdName">#name_display#</div>
     </div>
-    <div class="content-sm ">
-        <div class="input-group buttons">
-            <span class="input-group-btn" style="position: relative;">
-                <a class="btn btn-default btn-sm bt_minus roundedLeft"><i class="fas fa-minus"></i></a>
-            </span>
-            <input type="text" class="input-sm in_value form-control" value="#state# #unite#" disabled/>
-            <span class="input-group-btn" style="position: relative;">
-                <a class="btn btn-default btn-sm bt_plus roundedRight"><i class="fa fa-plus"></i></a>
-            </span>
-        </div>
-    </div>
+    <label for="sliderInput#id#"></label><input type="number" min="#minValue#" max="#maxValue#" value="#state#" step="1" id="sliderInput#id#" style="text-align: center">
+    <div id="widget_slider#id#" class="slider"></div>
     <script>
-        $('.cmd[data-cmd_uid=#uid#] .bt_plus').on('click', function () {
-            let max = ('#maxValue#' === '') ?  Number.MAX_VALUE : parseFloat('#maxValue#')
-            let step = (isNaN(parseFloat('#step#'))) ?  1 : parseFloat('#step#')
-            let cmd = $('.cmd[data-cmd_uid=#uid#] .in_value')
-            if (parseFloat(cmd.val()) <= max - step ) {
-                jeedom.cmd.update['#id#']({display_value:parseFloat(cmd.val()) + step})
-                cmd.trigger('change')
-            }
-        })
-
-        $('.cmd[data-cmd_uid=#uid#] .bt_minus').on('click', function () {
-            let min = ('#minValue#' === '') ? Number.MIN_VALUE : parseFloat('#minValue#')
-            let step = (isNaN(parseFloat('#step#'))) ?  1 : parseFloat('#step#')
-            let cmd = $('.cmd[data-cmd_uid=#uid#] .in_value')
-            if (parseFloat(cmd.val()) >= min + step) {
-                jeedom.cmd.update['#id#']({display_value:parseFloat(cmd.val()) - step})
-                cmd.trigger('change')
-            }
-        })
-
-        $('.cmd[data-cmd_uid=#uid#] .in_value').on('change', function () {
-            if (typeof timerHandle#uid# !== 'undefined') {
-                clearTimeout(timerHandle#uid#)
-            }
-            timerHandle#uid# = setTimeout(function() {
-                jeedom.cmd.execute({id:'#id#', value: {slider: $('.cmd[data-cmd_uid=#uid#] .in_value').val().replace("#unite#", "").replace(" ", "")}})
-            }, 1000)
-        })
-
-        jeedom.cmd.update['#id#'] = function(_options) {
-            $('.cmd[data-cmd_uid=#uid#] .in_value').val(_options.display_value+' #unite#')
+        var $inputNumber#id# = $('#sliderInput#id#')
+        var step#id# = 1
+        var spinTimer#id# = null
+        if ($.issetWidgetOptParam('#step#', 'step')) {
+            step#id# = parseFloat('#step#')
+            $inputNumber#id#.attr('step', step#id#)
         }
-        jeedom.cmd.update['#id#']({display_value: '#state#'})
+
+        $('#sliderInput#id#').spinner({
+            icons: { down: "ui-icon-triangle-1-s", up: "ui-icon-triangle-1-n"},
+            stop: function(event, ui) {
+                if (event.currentTarget.id !== 'sliderInput#id#') {
+                    clearTimeout(spinTimer#id#)
+                    spinTimer#id# = setTimeout(function() {
+                        $inputNumber#id#.trigger('change')
+                    }, 1000)
+                }
+            }
+        })
+
+        $inputNumber#id#.on('focusout', function(event) {
+            clearTimeout(spinTimer#id#)
+            if ($(this).attr('value') === $(this).attr('aria-valuenow')) return false
+            jeedom.cmd.execute({id: '#id#', value: {slider: this.value}})
+        })
+
+        $inputNumber#id#.on('change', function(event) {
+            jeedom.cmd.execute({id: '#id#', value: {slider: this.value}})
+        })
+
+        jeedom.cmd.addUpdateFunction('#id#',function(_options) {
+            $inputNumber#id#.val(_options.display_value).attr('value', _options.display_value).attr('aria-valuenow', _options.display_value)
+        });
     </script>
 </div>

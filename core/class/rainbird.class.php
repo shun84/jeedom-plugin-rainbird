@@ -21,7 +21,6 @@ require_once __DIR__  . '/../../../../core/php/core.inc.php';
 require_once __DIR__ . '/../../core/api/rainbirdApi.php';
 
 class rainbird extends eqLogic {
-	public static $_widgetPossibility = array('custom' => true, 'custom::layout' => false);
 
     /* ***********************Methode static*************************** */
     public static function cron() {
@@ -32,43 +31,34 @@ class rainbird extends eqLogic {
         }
     }
 
-    public static function pluginGenericTypes(): array
-    {
-        return [
-            'RAINBIRD_STOPRAIN' => [
-                'name' => __('Arreter l\'irrigation',__FILE__),
-                'familyid' => 'rainbird',
-                'family' => __('Plugin RainBird',__FILE__),
-                'type' => 'Action',
-                'subtype' => ['other']
-            ],
-            'RAINBIRD_STARTRAIN' => [
-                'name' => __('Lancer l\'irrigation',__FILE__),
-                'familyid' => 'rainbird',
-                'family' => __('Plugin RainBird',__FILE__),
-                'type' => 'Action',
-                'subtype' => ['other']
-            ],
-            'RAINBIRD_GETRAIN' => [
-                'name' => __('Récupération l\'irrigation',__FILE__),
-                'familyid' => 'rainbird',
-                'family' => __('Plugin RainBird',__FILE__),
-                'type' => 'Info',
-                'subtype' => ['binary']
-            ]
-        ];
+    /* *********************Méthodes d'instance************************* */
+    /**
+     * @throws Exception
+     */
+    public function verifConnexion(rainbirdApi $apirainbird){
+        $getcurrentdate = $apirainbird->get_current_date();
+
+        if (count($getcurrentdate) > 1){
+            foreach ($getcurrentdate as $value){
+                log::add('rainbird','debug',$value);
+            }
+            throw new Exception(__('Vérifier votre login et mot de passe ou l\'application rainbird lancé sur votre Téléphone', __FILE__));
+        }
     }
 
-    /* *********************Méthodes d'instance************************* */
     public function updateRainbird() {
         $apirainbird = new rainbirdApi($this->getConfiguration('iprainbird'), $this->getConfiguration('mdprainbird'));
 
         $this->checkAndUpdateCmd('daterainbird', $apirainbird->get_current_date()[0]);
         $this->checkAndUpdateCmd('timerainbird', $apirainbird->get_current_time()[0]);
         $this->checkAndUpdateCmd('getraindelay', $apirainbird->get_rain_delay()[0]);
+        $this->checkAndUpdateCmd('getrainsensorstate', $apirainbird->get_rain_sensor_state()[0]);
+        $this->checkAndUpdateCmd('dureezonetest',$this->getConfiguration('dureetestzone'));
 
         for ($i = 1; $i <= $this->getConfiguration('nbzone'); $i++){
             $this->checkAndUpdateCmd('getzonelancer'.$i, $apirainbird->get_zone_state($i)[0]);
+            $this->checkAndUpdateCmd('timezone'.$i, $this->getConfiguration('duree'.$i));
+            $this->checkAndUpdateCmd('namezone'.$i, $this->getConfiguration('nomzone'.$i));
         }
 
         $this->refreshWidget();
@@ -88,30 +78,53 @@ class rainbird extends eqLogic {
             throw new Exception(__('Veuillez saisir votre mot de passe du rainbird', __FILE__));
         }
 
-        if ($this->getConfiguration('nbzone') === '') {
-            throw new Exception(__('Veuillez sélectionner le nombre de zone du rainbird', __FILE__));
-        }
-
         $apirainbird = new rainbirdApi($this->getConfiguration('iprainbird'), $this->getConfiguration('mdprainbird'));
 
+        $this->verifConnexion($apirainbird);
+
         $availablestations = $apirainbird->get_available_stations();
-
         $getserialnumber = $apirainbird->get_serial_number();
-
         $modelandversion = $apirainbird->get_model_and_version();
 
-        $this->setConfiguration('model',$modelandversion[0]);
-        $this->setConfiguration('version',$modelandversion[1]);
-        $this->setConfiguration('serial',$getserialnumber[0]);
+        $this->setConfiguration('model', $modelandversion[0]);
+        $this->setConfiguration('version', $modelandversion[1]);
+        $this->setConfiguration('serial', $getserialnumber[0]);
+        $this->setConfiguration('nbzone', $availablestations);
+
+        for ($i = 1; $i <= $this->getConfiguration('nbzone'); $i++){
+            if($this->getConfiguration('nomzone'.$i) === ''){
+                $this->setConfiguration('nomzone'.$i, 'Zone '.$i);
+            }
+
+            if($this->getConfiguration('duree'.$i) === ''){
+                $this->setConfiguration('duree'.$i, 0);
+            }
+        }
+
+        if ($this->getConfiguration('dureetestzone') === ''){
+            $this->setConfiguration('dureetestzone', 2);
+        }
     }
 
     /**
-     * Fonction exécutée automatiquement après la mise à jour de l'équipement
+     * Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
      *
      * @throws Exception
      */
-    public function postUpdate() {
+    public function postSave() {
         for ($i = 1; $i <= $this->getConfiguration('nbzone'); $i++){
+            $namezone = $this->getCmd(null, 'namezone'.$i);
+            if (!is_object($namezone)) {
+                $namezone = new rainbirdCmd();
+            }
+            $namezone->setName(__('Name Zone'.$i, __FILE__));
+            $namezone->setLogicalId('namezone'.$i);
+            $namezone->setEqLogic_id($this->getId());
+            $namezone->setType('info');
+            $namezone->setSubType('string');
+            $namezone->setGeneric_type('GENERIC_INFO');
+            $namezone->save();
+
             $getzonelancer = $this->getCmd(null, 'getzonelancer'.$i);
             if (!is_object($getzonelancer)) {
                 $getzonelancer = new rainbirdCmd();
@@ -121,8 +134,22 @@ class rainbird extends eqLogic {
             $getzonelancer->setEqLogic_id($this->getId());
             $getzonelancer->setType('info');
             $getzonelancer->setSubType('binary');
-//            $getzonelancer->setGeneric_type('RAINBIRD_GETRAIN');
+            $getzonelancer->setIsHistorized(1);
+            $getzonelancer->setGeneric_type('GENERIC_INFO');
             $getzonelancer->save();
+
+            $timezone = $this->getCmd(null, 'timezone'.$i);
+            if (!is_object($timezone)) {
+                $timezone = new rainbirdCmd();
+            }
+            $timezone->setName(__('Durée zone '.$i, __FILE__));
+            $timezone->setLogicalId('timezone'.$i);
+            $timezone->setEqLogic_id($this->getId());
+            $timezone->setType('info');
+            $timezone->setSubType('numeric');
+            $timezone->setUnite('minutes');
+            $timezone->setGeneric_type('GENERIC_INFO');
+            $timezone->save();
 
             $zonelancer = $this->getCmd(null, 'zonelancer'.$i);
             if (!is_object($zonelancer)) {
@@ -133,7 +160,7 @@ class rainbird extends eqLogic {
             $zonelancer->setEqLogic_id($this->getId());
             $zonelancer->setType('action');
             $zonelancer->setSubType('other');
-//            $zonelancer->setGeneric_type('RAINBIRD_STARTRAIN');
+            $zonelancer->setGeneric_type('GENERIC_ACTION');
             $zonelancer->setValue($getzonelancer->getId());
             $zonelancer->save();
 
@@ -146,54 +173,16 @@ class rainbird extends eqLogic {
             $zonestop->setEqLogic_id($this->getId());
             $zonestop->setType('action');
             $zonestop->setSubType('other');
-//            $zonestop->setGeneric_type('RAINBIRD_STOPRAIN');
+            $zonestop->setGeneric_type('GENERIC_ACTION');
             $zonestop->setValue($getzonelancer->getId());
             $zonestop->save();
         }
-    }
 
-    /**
-     * Fonction exécutée automatiquement avant la sauvegarde (création ou mise à jour) de l'équipement
-     */
-    public function preSave() {
-        for ($i = 1; $i <= $this->getConfiguration('nbzone'); $i++){
-            if($this->getConfiguration('nomzone'.$i) === ''){
-                    $this->setConfiguration('nomzone'.$i, 'Zone '.$i);
-            }
-
-            if($this->getConfiguration('duree'.$i) === ''){
-                $this->setConfiguration('duree'.$i, 0);
-            }
-        }
-
-        if ($this->getConfiguration('dureetestzone') === ''){
-            $this->setConfiguration('dureetestzone', 2);
-        }
-
-        if ($this->getConfiguration('nbzone') < "5"){
-            $this->setDisplay("height","220px");
-        }
-
-        if ($this->getConfiguration('nbzone') > "4" && $this->getConfiguration('nbzone') < "9"){
-            $this->setDisplay("height","325px");
-        }
-
-        if ($this->getConfiguration('nbzone') > "8" && $this->getConfiguration('nbzone') < "13"){
-            $this->setDisplay("height","430px");
-        }
-    }
-
-    /**
-     * Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
-     *
-     * @throws Exception
-     */
-    public function postSave() {
         $daterainbird = $this->getCmd(null, 'daterainbird');
         if (!is_object($daterainbird)) {
             $daterainbird = new rainbirdCmd();
         }
-        $daterainbird->setName(__('Date Rainbird', __FILE__));
+        $daterainbird->setName(__('Date', __FILE__));
         $daterainbird->setLogicalId('daterainbird');
         $daterainbird->setEqLogic_id($this->getId());
         $daterainbird->setType('info');
@@ -204,7 +193,7 @@ class rainbird extends eqLogic {
         if (!is_object($timerainbird)) {
             $timerainbird = new rainbirdCmd();
         }
-        $timerainbird->setName(__('Time Rainbird', __FILE__));
+        $timerainbird->setName(__('Heure', __FILE__));
         $timerainbird->setLogicalId('timerainbird');
         $timerainbird->setEqLogic_id($this->getId());
         $timerainbird->setType('info');
@@ -220,7 +209,7 @@ class rainbird extends eqLogic {
         $stopirrigation->setEqLogic_id($this->getId());
         $stopirrigation->setType('action');
         $stopirrigation->setSubType('other');
-        $stopirrigation->setGeneric_type('RAINBIRD_STOPRAIN');
+        $stopirrigation->setGeneric_type('GENERIC_ACTION');
         $stopirrigation->save();
 
         $getraindelay = $this->getCmd(null, 'getraindelay');
@@ -233,6 +222,7 @@ class rainbird extends eqLogic {
         $getraindelay->setType('info');
         $getraindelay->setSubType('numeric');
         $getraindelay->setUnite('Jours');
+        $getraindelay->setIsVisible(0);
         $getraindelay->setConfiguration('minValue',0);
         $getraindelay->setConfiguration('maxValue', 14);
         $getraindelay->save();
@@ -251,6 +241,19 @@ class rainbird extends eqLogic {
         $setraindelay->setValue($getraindelay->getId());
         $setraindelay->save();
 
+        $dureezonetest = $this->getCmd(null, 'dureezonetest');
+        if (!is_object($dureezonetest)) {
+            $dureezonetest = new rainbirdCmd();
+        }
+        $dureezonetest->setName(__('Durée Zone Test', __FILE__));
+        $dureezonetest->setLogicalId('dureezonetest');
+        $dureezonetest->setEqLogic_id($this->getId());
+        $dureezonetest->setType('info');
+        $dureezonetest->setSubType('numeric');
+        $dureezonetest->setUnite('minutes');
+        $dureezonetest->setGeneric_type('GENERIC_INFO');
+        $dureezonetest->save();
+
         $zonetest = $this->getCmd(null, 'zonetest');
         if (!is_object($zonetest)) {
             $zonetest = new rainbirdCmd();
@@ -260,8 +263,100 @@ class rainbird extends eqLogic {
         $zonetest->setEqLogic_id($this->getId());
         $zonetest->setType('action');
         $zonetest->setSubType('other');
-        $zonetest->setGeneric_type('RAINBIRD_STARTRAIN');
+        $zonetest->setValue($dureezonetest->getId());
+        $zonetest->setGeneric_type('GENERIC_ACTION');
         $zonetest->save();
+
+        $getrainsensorstate = $this->getCmd(null, 'getrainsensorstate');
+        if (!is_object($getrainsensorstate)) {
+            $getrainsensorstate = new rainbirdCmd();
+        }
+        $getrainsensorstate->setName(__('Sensor', __FILE__));
+        $getrainsensorstate->setLogicalId('getrainsensorstate');
+        $getrainsensorstate->setEqLogic_id($this->getId());
+        $getrainsensorstate->setType('info');
+        $getrainsensorstate->setSubType('binary');
+        $getrainsensorstate->setGeneric_type('GENERIC_INFO');
+        $getrainsensorstate->save();
+
+        $getwaterbudget = $this->getCmd(null, 'getwaterbudget');
+        if (!is_object($getwaterbudget)) {
+            $getwaterbudget = new rainbirdCmd();
+        }
+        $getwaterbudget->setName(__('Pourcentage saisonnier', __FILE__));
+        $getwaterbudget->setLogicalId('getwaterbudget');
+        $getwaterbudget->setEqLogic_id($this->getId());
+        $getwaterbudget->setType('info');
+        $getwaterbudget->setSubType('numeric');
+        $getwaterbudget->setUnite('%');
+        $getwaterbudget->setIsVisible(0);
+        $getwaterbudget->setGeneric_type('GENERIC_INFO');
+        $getwaterbudget->save();
+
+        $waterbudget = $this->getCmd(null, 'waterbudget');
+        if (!is_object($waterbudget)) {
+            $waterbudget = new rainbirdCmd();
+        }
+        $waterbudget->setName(__('Ajustement saisonnier', __FILE__));
+        $waterbudget->setLogicalId('waterbudget');
+        $waterbudget->setEqLogic_id($this->getId());
+        $waterbudget->setType('action');
+        $waterbudget->setSubType('slider');
+        $waterbudget->setGeneric_type('GENERIC_ACTION');
+        $waterbudget->setValue($getwaterbudget->getId());
+        $waterbudget->save();
+
+        $program = $this->getCmd(null, 'program');
+        if (!is_object($program)) {
+            $program = new rainbirdCmd();
+        }
+        $program->setName(__('Programme', __FILE__));
+        $program->setLogicalId('program');
+        $program->setEqLogic_id($this->getId());
+        $program->setType('info');
+        $program->setSubType('numeric');
+        $program->setIsVisible(0);
+        $program->setGeneric_type('GENERIC_INFO');
+        $program->save();
+
+        $setprogram = $this->getCmd(null, 'setprogram');
+        if (!is_object($setprogram)) {
+            $setprogram = new rainbirdCmd();
+        }
+        $setprogram->setName(__('Lancer un programme', __FILE__));
+        $setprogram->setLogicalId('setprogram');
+        $setprogram->setEqLogic_id($this->getId());
+        $setprogram->setType('action');
+        $setprogram->setSubType('slider');
+        $setprogram->setValue($program->getId());
+        $setprogram->setGeneric_type('GENERIC_ACTION');
+        $setprogram->save();
+
+        $getadvancezone= $this->getCmd(null, 'getadvancezone');
+        if (!is_object($getadvancezone)) {
+            $getadvancezone = new rainbirdCmd();
+        }
+        $getadvancezone->setName(__('Zone suivante', __FILE__));
+        $getadvancezone->setLogicalId('getadvancezone');
+        $getadvancezone->setEqLogic_id($this->getId());
+        $getadvancezone->setType('info');
+        $getadvancezone->setSubType('numeric');
+        $getadvancezone->setIsVisible(0);
+        $getadvancezone->setGeneric_type('GENERIC_INFO');
+        $getadvancezone->save();
+
+        $advancezone = $this->getCmd(null, 'advancezone');
+        if (!is_object($advancezone)) {
+            $advancezone = new rainbirdCmd();
+        }
+        $advancezone->setName(__('Prochaine zone', __FILE__));
+        $advancezone->setLogicalId('advancezone');
+        $advancezone->setEqLogic_id($this->getId());
+        $advancezone->setType('action');
+        $advancezone->setSubType('slider');
+        $advancezone->setValue($getadvancezone->getId());
+        $advancezone->setGeneric_type('GENERIC_ACTION');
+        $advancezone->save();
 
         if ($this->getIsEnable() == 1) {
             $this->updateRainbird();
@@ -281,7 +376,7 @@ class rainbird extends eqLogic {
         } else {
             if (exec(system::getCmdSudo() . system::get('cmd_check') . '-Ec "python3\-venv"') < 1) {
                 $return['state'] = 'nok';
-//            } elseif (exec(system::getCmdSudo() . 'pip3 list | grep -Ewc "pycryptodome|requests|DateTime|PyYAML|setuptools"') < 5) {
+//            } elseif (exec(realpath(dirname(__FILE__) . '/../../resources/pyrainbird'). ' && source env/bin/activate && pip3 list | grep -Ewc "pycryptodome|requests|DateTime|setuptools" && deactivate') < 4) {
 //                $return['state'] = 'nok';
             } else {
                 $return['state'] = 'ok';
@@ -296,43 +391,10 @@ class rainbird extends eqLogic {
     public static function dependancy_install(): array
     {
         log::remove(__CLASS__ . '_update');
-        return array('script' => dirname(__FILE__) . '/../../resources/install_#stype#.sh ' . jeedom::getTmpFolder(__CLASS__).'/dependency', 'log' => log::getPathToLog(__CLASS__.'_update'));
-    }
-
-    /**
-     * @throws Exception
-     */
-    public static function stopIrrigationVsAgenda(eqLogic $eqLogic){
-        $apirainbird = new rainbirdApi($eqLogic->getConfiguration('iprainbird'), $eqLogic->getConfiguration('mdprainbird'));
-        $plugincalendar = plugin::byId('calendar');
-
-        try {
-            if (!is_object($plugincalendar) || $plugincalendar->isActive() != 1) {
-                ajax::success([]);
-            }
-        } catch (Exception $e) {
-            ajax::success([]);
-        }
-
-        if ($apirainbird->get_rain_delay()[0] != 0){
-            for ($i = 1; $i <= $eqLogic->getConfiguration('nbzone'); $i++){
-                $rainbird_cmd = $eqLogic->getCmd(null, 'zonelancer'.$i);
-                if (is_object($rainbird_cmd)) {
-                    foreach (calendar_event::searchByCmd($rainbird_cmd->getId()) as $event){
-                        $test = $plugincalendar->getId();
-                    }
-                }
-            }
-        } else {
-            for ($i = 1; $i <= $eqLogic->getConfiguration('nbzone'); $i++){
-                $rainbird_cmd = $eqLogic->getCmd(null, 'zonelancer'.$i);
-                if (is_object($rainbird_cmd)) {
-                    foreach (calendar_event::searchByCmd($rainbird_cmd->getId()) as $event) {
-
-                    }
-                }
-            }
-        }
+        return [
+            'script' => dirname(__FILE__) . '/../../resources/install_#stype#.sh ' . jeedom::getTmpFolder(__CLASS__).'/dependency',
+            'log' => log::getPathToLog(__CLASS__.'_update')
+        ];
     }
 
     /**
@@ -344,259 +406,9 @@ class rainbird extends eqLogic {
             throw new Exception(__('L\'arrossage est arrêté', __FILE__));
         }
     }
-
-    public function zoneHtml(int $i, string $version): string
-    {
-        $replacezone = [];
-
-        $getzonelancer = $this->getCmd(null, 'getzonelancer'.$i);
-        $replacezone['#id#'] = is_object($getzonelancer) ? $getzonelancer->getId() : '';
-        $replacezone['#state#'] = is_object($getzonelancer) ? $getzonelancer->execCmd() : '';
-        $replacezone['#_icon_on_#'] = '<i class=\'fas fa-tint fa-3x\'></i>';
-        $replacezone['#_icon_off_#'] = '<i class=\'fas fa-tint-slash fa-3x\'></i>';
-
-        $getnomzone = $this->getConfiguration('nomzone'.$i);
-        $replacezone['#name_display#'] = $getnomzone;
-
-        $gettimezone = $this->getConfiguration('duree'.$i);
-        $replacezone['#gettimezone#'] = $gettimezone;
-
-        $lancerzone = $this->getCmd(null, 'zonelancer'.$i);
-        $replacezone['#zonelancer#'] = is_object($lancerzone) ? $lancerzone->getId() : '';
-
-        $stopzone = $this->getCmd(null, 'zonestop'.$i);
-        $replacezone['#zonestop#'] = is_object($stopzone) ? $stopzone->getId() : '';
-
-        return template_replace($replacezone, getTemplate('core', $version, 'zone', __CLASS__));
-    }
-
-    /**
-     * Non obligatoire : permet de modifier l'affichage du widget (également utilisable par les commandes)
-     *
-     * @throws Exception
-     */
-    public function toHtml($_version = 'dashboard') {
-        $replace = $this->preToHtml($_version);
-        if (!is_array($replace)) {
-            return $replace;
-        }
-        $version = jeedom::versionAlias($_version);
-
-        $daterainbird = $this->getCmd(null, 'daterainbird');
-        $replace['#daterainbird#'] = is_object($daterainbird) ? $daterainbird->execCmd() : '';
-
-        $timerainbird = $this->getCmd(null, 'timerainbird');
-        $timerainbird = substr(is_object($timerainbird) ? $timerainbird->execCmd() : '', 0,-3);
-        $replace['#timerainbird#'] = $timerainbird;
-
-        $stopirrigation = $this->getCmd(null, 'stopirrigation');
-        $replace['#stopirrigation#'] = is_object($stopirrigation) ? $stopirrigation->getId() : '';
-
-        $replaceraindelay = [];
-
-        $setraindelay = $this->getCmd(null, 'setraindelay');
-        $replaceraindelay['#id#'] = is_object($setraindelay) ? $setraindelay->getId() : '';
-        $replaceraindelay['#maxValue#'] = is_object($setraindelay) ? $setraindelay->getConfiguration('maxValue') : '';
-        $replaceraindelay['#minValue#'] = is_object($setraindelay) ? $setraindelay->getConfiguration('minValue') : '';
-
-        $getraindelay = $this->getCmd(null, 'getraindelay');
-        $replaceraindelay['#name_display#'] = is_object($getraindelay) ? $getraindelay->getName() : '';
-        $replaceraindelay['#uid#'] = is_object($getraindelay) ? $getraindelay->getId() : '';
-        $replaceraindelay['#state#'] = is_object($getraindelay) ? $getraindelay->execCmd() : '';
-        $replaceraindelay['#unite#'] = is_object($getraindelay) ? $getraindelay->getUnite() : '';
-
-        $replace['#raindelay#'] = template_replace($replaceraindelay, getTemplate('core', $version, 'raindelay', __CLASS__));
-
-        $getdureetestzone = $this->getConfiguration('dureetestzone');
-        $replace['#getdureetestzone#'] = $getdureetestzone;
-
-        $zonetest = $this->getCmd(null, 'zonetest');
-        $replace['#zonetest#'] = is_object($zonetest) ? $zonetest->getId() : '';
-
-        $getnbzone = $this->getConfiguration('nbzone');
-
-        $classandleft = '<div class="col-md-6" style="float: left">';
-        $closediv = '</div>';
-
-        if ($version === 'mobile'){
-            if ($getnbzone < "3"){
-                $replace['#height#'] = '390px';
-                for ($i = 1; $i <= $getnbzone; $i++){
-                    $replace['#zone#'] .= $classandleft;
-                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= $closediv;
-                }
-            }
-
-            if ($getnbzone > "2" && $getnbzone < "5"){
-                $replace['#height#'] = '515px';
-                for ($i = 1; $i <= 2; $i++){
-                    $replace['#zone#'] .= $classandleft;
-                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= $closediv;
-                }
-                for ($i = 3; $i <= $getnbzone; $i++){
-                    $replace['#zone#'] .= $classandleft;
-                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= $closediv;
-                }
-            }
-
-            if ($getnbzone > "4" && $getnbzone < "7"){
-                $replace['#height#'] = '625px';
-                for ($i = 1; $i <= 2; $i++){
-                    $replace['#zone#'] .= $classandleft;
-                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= $closediv;
-                }
-                for ($i = 3; $i <= 4; $i++){
-                    $replace['#zone#'] .= $classandleft;
-                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= $closediv;
-                }
-                for ($i = 5; $i <= $getnbzone; $i++){
-                    $replace['#zone#'] .= $classandleft;
-                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= $closediv;
-                }
-            }
-
-            if ($getnbzone > "6" && $getnbzone < "9"){
-                $replace['#height#'] = '755px';
-                for ($i = 1; $i <= 2; $i++){
-                    $replace['#zone#'] .= $classandleft;
-                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= $closediv;
-                }
-                for ($i = 3; $i <= 4; $i++){
-                    $replace['#zone#'] .= $classandleft;
-                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= $closediv;
-                }
-                for ($i = 5; $i <= 6; $i++){
-                    $replace['#zone#'] .= $classandleft;
-                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= $closediv;
-                }
-                for ($i = 7; $i <= $getnbzone; $i++){
-                    $replace['#zone#'] .= $classandleft;
-                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= $closediv;
-                }
-            }
-
-            if ($getnbzone > "8" && $getnbzone < "11") {
-                $replace['#height#'] = '885px';
-                for ($i = 1; $i <= 2; $i++) {
-                    $replace['#zone#'] .= $classandleft;
-                    $replace['#zone#'] .= $this->zoneHtml($i, $version);
-                    $replace['#zone#'] .= $closediv;
-                }
-                for ($i = 3; $i <= 4; $i++) {
-                    $replace['#zone#'] .= $classandleft;
-                    $replace['#zone#'] .= $this->zoneHtml($i, $version);
-                    $replace['#zone#'] .= $closediv;
-                }
-                for ($i = 5; $i <= 6; $i++) {
-                    $replace['#zone#'] .= $classandleft;
-                    $replace['#zone#'] .= $this->zoneHtml($i, $version);
-                    $replace['#zone#'] .= $closediv;
-                }
-                for ($i = 7; $i <= 8; $i++) {
-                    $replace['#zone#'] .= $classandleft;
-                    $replace['#zone#'] .= $this->zoneHtml($i, $version);
-                    $replace['#zone#'] .= $closediv;
-                }
-                for ($i = 9; $i <= $getnbzone; $i++) {
-                    $replace['#zone#'] .= $classandleft;
-                    $replace['#zone#'] .= $this->zoneHtml($i, $version);
-                    $replace['#zone#'] .= $closediv;
-                }
-            }
-
-            if ($getnbzone > "10" && $getnbzone < "13"){
-                $replace['#height#'] = '995px';
-                for ($i = 1; $i <= 2; $i++){
-                    $replace['#zone#'] .= $classandleft;
-                    $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= $closediv;
-                }
-                for ($i = 3; $i <= 4; $i++){
-                    $replace['#zone#'] .= $classandleft;
-                    $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= $closediv;
-                }
-                for ($i = 5; $i <= 6; $i++){
-                    $replace['#zone#'] .= $classandleft;
-                    $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= $closediv;
-                }
-                for ($i = 7; $i <= 8; $i++){
-                    $replace['#zone#'] .= $classandleft;
-                    $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= $closediv;
-                }
-                for ($i = 9; $i <= 10; $i++){
-                    $replace['#zone#'] .= $classandleft;
-                    $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= $closediv;
-                }
-                for ($i = 11; $i <= $getnbzone; $i++){
-                    $replace['#zone#'] .= $classandleft;
-                    $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    $replace['#zone#'] .= $closediv;
-                }
-            }
-        }else{
-            if ($getnbzone < "5"){
-                $replace['#zone#'] .= '<div style="margin-top: 10px; height: 100px">';
-                    for ($i = 1; $i <= $getnbzone; $i++){
-                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    }
-                $replace['#zone#'] .= $closediv;
-            }
-
-            if ($getnbzone > "4" && $getnbzone < "9"){
-                $replace['#zone#'] .= '<div style="margin-top: 10px; height: 100px">';
-                    for ($i = 1; $i <= 4; $i++){
-                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    }
-                $replace['#zone#'] .= $closediv;
-                $replace['#zone#'] .= '<div style="margin-top: 10px; height: 100px">';
-                    for ($i = 5; $i <= $getnbzone; $i++){
-                        $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                    }
-                $replace['#zone#'] .= $closediv;
-            }
-
-            if ($getnbzone > "8" && $getnbzone < "13"){
-                $replace['#zone#'] .= '<div style="margin-top: 10px; height: 100px">';
-                for ($i = 1; $i <= 4; $i++){
-                    $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                }
-                $replace['#zone#'] .= $closediv;
-                $replace['#zone#'] .= '<div style="margin-top: 10px; height: 100px">';
-                for ($i = 5; $i <= 8; $i++){
-                    $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                }
-                $replace['#zone#'] .= $closediv;
-                $replace['#zone#'] .= '<div style="margin-top: 10px; height: 100px">';
-                for ($i = 9; $i <= $getnbzone; $i++){
-                    $replace['#zone#'] .= $this->zoneHtml($i,$version);
-                }
-                $replace['#zone#'] .= $closediv;
-            }
-        }
-
-        $html = $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'rainbird', 'rainbird')));
-        cache::set('widgetHtml' . $_version . $this->getId(), $html, 0);
-        return $html;
-    }
 }
 
 class rainbirdCmd extends cmd {
-
-    public static $_widgetPossibility = ['custom' => false];
 
     /**
      * Exécution des commandes via le dashbord
@@ -606,9 +418,8 @@ class rainbirdCmd extends cmd {
      */
     public function execute($_options = []) {
         $apirainbird = new rainbirdApi($this->getEqLogic()->getConfiguration('iprainbird'), $this->getEqLogic()->getConfiguration('mdprainbird'));
-        if ($apirainbird->get_current_date()[0] == 'None'){
-            throw new Exception(__('Vérifier votre login et mot de passe ou l\'application rainbird lancé sur votre Téléphone', __FILE__));
-        }
+        $rainbird = new rainbird();
+        $rainbird->verifConnexion($apirainbird);
 
         for ($i = 1; $i <= $this->getEqLogic()->getConfiguration('nbzone'); $i++){
             if ($this->getLogicalId() === 'zonelancer'.$i){
@@ -643,7 +454,6 @@ class rainbirdCmd extends cmd {
             $getvaleurslider = $_options['slider'];
             $apirainbird->set_rain_delay($getvaleurslider);
             $this->getEqLogic()->checkAndUpdateCmd('getraindelay', $apirainbird->get_rain_delay()[0]);
-            rainbird::stopIrrigationVsAgenda($this->getEqLogic());
             log::add('rainbird','debug','Lancement de l\'action pour arreter l\'irrigation sur un nombre de jours');
         }
 
@@ -651,6 +461,42 @@ class rainbirdCmd extends cmd {
             rainbird::stopIrrigationPlay($this->getEqLogic());
             $apirainbird->test_zone($this->getEqLogic()->getConfiguration('dureetestzone'));
             log::add('rainbird','debug','Lancement de l\'action test des zones');
+        }
+
+        if ($this->getLogicalId() === 'waterbudget'){
+            $ajustsaison = $_options['slider'];
+            $waterbudget = $apirainbird->water_budget($ajustsaison);
+            if (count($waterbudget) > 1){
+                foreach ($waterbudget as $value){
+                    log::add('rainbird','debug',$value);
+                }
+                throw new Exception(__('Vous avez pas accès à cette fonction pour votre RainBird', __FILE__));
+            }
+            $this->getEqLogic()->checkAndUpdateCmd('getwaterbudget',$ajustsaison);
+        }
+
+        if ($this->getLogicalId() === 'setprogram'){
+            $program = $_options['slider'];
+            $setprogram = $apirainbird->set_program($program);
+            if (count($setprogram) > 1){
+                foreach ($setprogram as $value){
+                    log::add('rainbird','debug',$value);
+                }
+                throw new Exception(__('Vous avez pas accès à cette fonction pour votre RainBird', __FILE__));
+            }
+            $this->getEqLogic()->checkAndUpdateCmd('program',$program);
+        }
+
+        if ($this->getLogicalId() === 'advancezone'){
+            $getadvancezone = $_options['slider'];
+            $advancezone = $apirainbird->advance_zone($getadvancezone);
+            if (count($advancezone) > 1){
+                foreach ($advancezone as $value){
+                    log::add('rainbird','debug',$value);
+                }
+                throw new Exception(__('Vous avez pas accès à cette fonction pour votre RainBird', __FILE__));
+            }
+            $this->getEqLogic()->checkAndUpdateCmd('getadvancezone',$getadvancezone);
         }
 
         $this->getEqLogic()->refreshWidget();

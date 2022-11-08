@@ -2,13 +2,13 @@
 from pyrainbird import RainbirdController
 import sys
 
-if len(sys.argv) < 3:
-  print("Usage: get_serial_number.py <ip> <password>")
+if len(sys.argv) < 4:
+  print("Usage: water_budget.py <ip> <password> <budget>")
   exit()
 
 ip = sys.argv[1]
 password = sys.argv[2]
+budget = sys.argv[3]
 
 controller = RainbirdController(ip, password)
-getserialnumber = controller.get_serial_number()
-print(getserialnumber)
+controller.water_budget(budget)

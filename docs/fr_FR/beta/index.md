@@ -15,9 +15,17 @@ Il vous faut à tout prit le **WIFI Link** : https://wifi.rainbird.com/
 
 Après avoir activé le plugin, vérifier que les dépendences sont ok, si c'est pas le cas les installer.
 
-Puis créer votre objet avec l'adresse **IP** et le **Mot de passe** et sélectionner le nombre de zones que vous avez et sauvegarder.
+Puis créer votre objet avec l'adresse **IP** et le **Mot de passe** et sauvegarder.
+
+Nombre de Zone récupérer par une fonction de **l'API**
 
 ![img_2.png](../../images/equipement.png)
+
+# Informations
+
+![Informations.png](../../images/informations.png)
+
+- No Serial : si c'est un **ESP-RZXE** ça sera = 0
 
 # Configuration des zones
 

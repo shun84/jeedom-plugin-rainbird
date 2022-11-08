@@ -29,20 +29,20 @@ $eqLogics = eqLogic::byType($plugin->getId());
         } else {
             // Champ de recherche
             echo '<div class="input-group" style="margin:5px;">';
-            echo '<input class="form-control roundedLeft" placeholder="{{Rechercher}}" id="in_searchEqlogic"/>';
-            echo '<div class="input-group-btn">';
-            echo '<a id="bt_resetSearch" class="btn" style="width:30px"><i class="fas fa-times"></i></a>';
-            echo '<a class="btn roundedRight hidden" id="bt_pluginDisplayAsTable" data-coreSupport="1" data-state="0"><i class="fas fa-grip-lines"></i></a>';
-            echo '</div>';
+            echo    '<input class="form-control roundedLeft" placeholder="{{Rechercher}}" id="in_searchEqlogic"/>';
+            echo    '<div class="input-group-btn">';
+            echo        '<a id="bt_resetSearch" class="btn" style="width:30px"><i class="fas fa-times"></i></a>';
+            echo        '<a class="btn roundedRight hidden" id="bt_pluginDisplayAsTable" data-coreSupport="1" data-state="0"><i class="fas fa-grip-lines"></i></a>';
+            echo    '</div>';
             echo '</div>';
             // Liste des équipements du plugin
             echo '<div class="eqLogicThumbnailContainer">';
             foreach ($eqLogics as $eqLogic) {
                 $opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
                 echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
-                echo '<img src="' . $plugin->getPathImgIcon() . '"/>';
-                echo '<br>';
-                echo '<span class="name">' . $eqLogic->getHumanName(true, true) . '</span>';
+                echo    '<img src="' . $plugin->getPathImgIcon() . '"/>';
+                echo    '<br>';
+                echo    '<span class="name">' . $eqLogic->getHumanName(true, true) . '</span>';
                 echo '</div>';
             }
             echo '</div>';
@@ -96,11 +96,11 @@ $eqLogics = eqLogic::byType($plugin->getId());
 									<select id="sel_object" class="eqLogicAttr form-control" data-l1key="object_id">
 										<option value="">{{Aucun}}</option>
 										<?php
-										$options = '';
-										foreach ((jeeObject::buildTree(null, false)) as $object) {
-											$options .= '<option value="' . $object->getId() . '">' . str_repeat('&nbsp;&nbsp;', $object->getConfiguration('parentNumber')) . $object->getName() . '</option>';
-										}
-										echo $options;
+                                            $options = '';
+                                            foreach ((jeeObject::buildTree(null, false)) as $object) {
+                                                $options .= '<option value="' . $object->getId() . '">' . str_repeat('&nbsp;&nbsp;', $object->getConfiguration('parentNumber')) . $object->getName() . '</option>';
+                                            }
+                                            echo $options;
 										?>
 									</select>
 								</div>
@@ -109,11 +109,11 @@ $eqLogics = eqLogic::byType($plugin->getId());
 								<label class="col-sm-3 control-label">{{Catégorie}}</label>
 								<div class="col-sm-9">
 									<?php
-									foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
-										echo '<label class="checkbox-inline">';
-										echo '<input type="checkbox" class="eqLogicAttr" data-l1key="category" data-l2key="' . $key . '" />' . $value['name'];
-										echo '</label>';
-									}
+                                        foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
+                                            echo '<label class="checkbox-inline">';
+                                            echo    '<input type="checkbox" class="eqLogicAttr" data-l1key="category" data-l2key="' . $key . '" />' . $value['name'];
+                                            echo '</label>';
+                                        }
 									?>
 								</div>
 							</div>
@@ -133,24 +133,19 @@ $eqLogics = eqLogic::byType($plugin->getId());
 								</div>
 							</div>
                             <div class="form-group">
-                                <label for="mdprainbird" class="col-sm-3 control-label">{{Mot de passe}}</label>
+                                <label for="mdprainbird" class="col-sm-3 control-label">{{Mot de passe}}
+                                    <sup><i class="fas fa-question-circle tooltips" title="{{C'est le mot de passe utilisé pour avoir accès à la configuration du RainBird}}"></i></sup>
+                                </label>
                                 <div class="col-sm-7">
                                     <input type="password" class="eqLogicAttr form-control" id="mdprainbird" data-l1key="configuration" data-l2key="mdprainbird"/>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="nbzone" class="col-sm-3 control-label">{{Nombre de Zone}}</label>
+                                <label for="nbzone" class="col-sm-3 control-label">{{Nombre de Zone}}
+                                    <sup><i class="fas fa-question-circle tooltips" title="{{Récupérer par une fonction de l'API}}"></i></sup>
+                                </label>
                                 <div class="col-sm-7">
-                                    <select id="nbzone" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="nbzone">
-                                        <option></option>
-                                        <?php
-                                            foreach ($eqLogics as $eqLogic){
-                                                for ($i = 1; $i <= $eqLogic->getConfiguration('nbzone'); $i++) {
-                                                    echo '<option value="'.$i.'">Zone '.$i.'</option>';
-                                                }
-                                            }
-                                        ?>
-                                    </select>
+                                    <input id="nbzone" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="nbzone" readonly>
                                 </div>
                             </div>
 						</div>
@@ -158,19 +153,22 @@ $eqLogics = eqLogic::byType($plugin->getId());
 							<legend><i class="fas fa-info"></i> {{Informations}}</legend>
                             <?php
                                 foreach ($eqLogics as $eqLogic){
-                                    echo '<label>Model</label>';
-                                    echo '<input type="text" class="form-control" value="'.$eqLogic->getConfiguration('model').'" data-l1key="configuration" data-l2key="model" readonly>';
-                                    echo '<label>Version</label>';
-                                    echo '<input type="text" class="form-control" value="'.$eqLogic->getConfiguration('version').'" data-l1key="configuration" data-l2key="version" readonly>';
-                                    echo '<label>No Serial (Si un ESP-RZXe = 0)</label>';
-                                    echo '<input type="text" class="form-control" value="'.$eqLogic->getConfiguration('serial').'" data-l1key="configuration" data-l2key="serial" readonly>';
+                                    echo '<div class="form-group">';
+                                    echo    '<label class="col-lg-2" for="model_rainbird">{{Model}}</label>';
+                                    echo    '<input type="text" class="col-lg-3 eqLogicAttr form-control" id="model_rainbird" value="'.$eqLogic->getConfiguration('model').'" data-l1key="configuration" data-l2key="model" readonly>';
+                                    echo '</div>';
+                                    echo '<div class="form-group">';
+                                    echo    '<label class="col-lg-2" for="version_rainbird">{{Version}}</label>';
+                                    echo    '<input type="text" class="col-lg-3 eqLogicAttr form-control" id="version_rainbird" value="'.$eqLogic->getConfiguration('version').'" data-l1key="configuration" data-l2key="version" readonly>';
+                                    echo '</div>';
+                                    echo '<div class="form-group">';
+                                    echo    '<label class="col-lg-2" for="serial_rainbird" data-help="Test">{{No Serial}}';
+                                    echo        '<sup><i class="fas fa-question-circle tooltips" title="{{Si vous avez un 0 correspond à un ESP-RZXe}}"></i></sup>';
+								    echo    '</label>';
+                                    echo    '<input type="text" class="col-lg-3 eqLogicAttr form-control" id="serial_rainbird" value="'.$eqLogic->getConfiguration('serial').'" data-l1key="configuration" data-l2key="serial" readonly>';
+                                    echo '</div>';
                                 }
                             ?>
-                            <div class="form-group">
-								<div class="text-center">
-									<img name="icon_visu" src="<?= $plugin->getPathImgIcon(); ?>" style="max-width:160px;"/>
-								</div>
-							</div>
 						</div>
 					</fieldset>
 				</form>
@@ -181,18 +179,18 @@ $eqLogics = eqLogic::byType($plugin->getId());
                     <fieldset>
                         <div class="row">
                             <div class="col-lg-6">
-                                <legend><i class="fas fa-hourglass-half"></i>{{Durée des zones}}</legend>
+                                <legend><i class="fas fa-hourglass-half"></i> {{Durée des zones}}</legend>
                                     <?php
-                                    if ($eqLogics){
-                                        for ($i = 1; $i <= $eqLogics[0]->getConfiguration('nbzone'); $i++){
-                                            echo '<div class="form-group">';
-                                            echo '<label for="duree'.$i.'" class="col-sm-3 control-label">Zone '.$i.'</label>';
-                                            echo '<div class="col-sm-7">';
-                                            echo '<input type="number" class="eqLogicAttr form-control"  id="duree'.$i.'" data-l1key="configuration" data-l2key="duree'.$i.'">';
-                                            echo '</div>';
-                                            echo '</div>';
+                                        if ($eqLogics){
+                                            for ($i = 1; $i <= $eqLogics[0]->getConfiguration('nbzone'); $i++){
+                                                echo '<div class="form-group">';
+                                                echo    '<label for="duree'.$i.'" class="col-sm-3 control-label">{{Zone ' . $i . '}}</label>';
+                                                echo    '<div class="col-sm-7">';
+                                                echo        '<input type="number" class="eqLogicAttr form-control"  id="duree'.$i.'" data-l1key="configuration" data-l2key="duree'.$i.'">';
+                                                echo    '</div>';
+                                                echo '</div>';
+                                            }
                                         }
-                                    }
                                     ?>
                                 <div class="form-group">
                                     <label for="dureetestzone" class="col-sm-3 control-label">{{Tout les zones}}</label>
@@ -202,18 +200,18 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 </div>
                             </div>
                             <div class="col-lg-6">
-                                <legend><i class="fas fa-ellipsis-v"></i>{{Nom des zones}}</legend>
+                                <legend><i class="fas fa-ellipsis-v"></i> {{Nom des zones}}</legend>
                                 <?php
-                                if ($eqLogics) {
-                                    for ($i = 1; $i <= $eqLogics[0]->getConfiguration('nbzone'); $i++) {
-                                        echo '<div class="form-group">';
-                                        echo '<label for="nomzone' . $i . '" class="col-sm-3 control-label">Nom de la Zone ' . $i . '</label>';
-                                        echo '<div class="col-sm-7">';
-                                        echo '<input type="text" class="eqLogicAttr form-control"  id="nomzone' . $i . '" data-l1key="configuration" data-l2key="nomzone' . $i . '">';
-                                        echo '</div>';
-                                        echo '</div>';
+                                    if ($eqLogics) {
+                                        for ($i = 1; $i <= $eqLogics[0]->getConfiguration('nbzone'); $i++) {
+                                            echo '<div class="form-group">';
+                                            echo    '<label for="nomzone' . $i . '" class="col-sm-3 control-label">{{Nom de la Zone ' . $i . '}}</label>';
+                                            echo    '<div class="col-sm-7">';
+                                            echo        '<input type="text" class="eqLogicAttr form-control"  id="nomzone' . $i . '" data-l1key="configuration" data-l2key="nomzone' . $i . '">';
+                                            echo    '</div>';
+                                            echo '</div>';
+                                        }
                                     }
-                                }
                                 ?>
                             </div>
                         </div>
@@ -232,12 +230,12 @@ $eqLogics = eqLogic::byType($plugin->getId());
 					<table id="table_cmd" class="table table-bordered table-condensed">
 						<thead>
 							<tr>
-								<th>{{Id}}</th>
-								<th>{{Nom}}</th>
-								<th>{{Type}}</th>
-								<th>{{Options}}</th>
-								<th>{{Paramètres}}</th>
-								<th>{{Action}}</th>
+                                <th class="hidden-xs" style="min-width:50px;width:70px;">ID</th>
+                                <th style="min-width:200px;width:350px;">{{Nom}}</th>
+                                <th>{{Type}}</th>
+                                <th style="min-width:260px;">{{Options}}</th>
+                                <th>{{Etat}}</th>
+                                <th style="min-width:80px;width:200px;">{{Actions}}</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -245,7 +243,6 @@ $eqLogics = eqLogic::byType($plugin->getId());
 					</table>
 				</div>
 			</div>
-
 		</div>
 	</div>
 </div>

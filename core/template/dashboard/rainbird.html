@@ -16,10 +16,11 @@
     </div>
     <div class="text-center" style="height: 70px">
         <div class="col-md-3">
-            <div class="title">
-                <div class="cmdName">Date et Heure</div>
-            </div>
-            <div class="state">#daterainbird# #timerainbird#</div>
+            #date#
+<!--            <div class="title">-->
+<!--                <div class="cmdName">Date et Heure</div>-->
+<!--            </div>-->
+<!--            <div class="state">#daterainbird# #timerainbird#</div>-->
         </div>
         <div class="col-md-3">
             <div class="title">
@@ -45,6 +46,26 @@
             </span>
         </div>
     </div>
+    <div class="cmd cmd-widget #history# col-md-3 center" data-type="info" data-subtype="binary" data-template="tmplicon" data-cmd_id="#sensor_id#" data-version="#version#">
+        <div class="title">
+            <div class="cmdName">#sensor_name_display#</div>
+        </div>
+        <div class="iconCmd"></div>
+        <script>
+            jeedom.cmd.update['#sensor_id#'] =function(_options) {
+                let cmd = $('.cmd[data-cmd_id=#sensor_id#]')
+
+                if (_options.display_value === '1') {
+                    cmd.find('.iconCmd').empty().append("#sensor_icon_on_#")
+                } else {
+                    cmd.find('.iconCmd').empty().append("#sensor_icon_off_#")
+                }
+            }
+
+            jeedom.cmd.update['#sensor_id#']({display_value: '#sensor_state#'})
+        </script>
+    </div>
+
     #zone#
     #divGraphInfo#
     <script>

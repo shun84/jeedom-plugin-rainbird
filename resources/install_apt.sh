@@ -22,9 +22,6 @@ echo 20 > ${PROGRESS_FILE}
 echo "*****************************"
 echo "Install modules using apt-get"
 echo "*****************************"
-cd ${BASEDIR}
-rm -r pyrainbird
-git clone https://github.com/jbarrancos/pyrainbird.git pyrainbird
 cd ${BASEDIR}/pyrainbird
 rm -r env
 sudo apt-get install -y python3-venv
@@ -37,13 +34,11 @@ echo "*************************************"
 source env/bin/activate
 pip3 install pycryptodome
 echo 58 > ${PROGRESS_FILE}
-pip3 install requests~=2.22.0
+pip3 install requests
 echo 72 > ${PROGRESS_FILE}
-pip3 install DateTime~=4.3
+pip3 install DateTime
 echo 84 > ${PROGRESS_FILE}
-pip3 install PyYAML>=5.4
-echo 86 > ${PROGRESS_FILE}
-pip3 install setuptools~=56.0.0
+pip3 install setuptools
 echo 90 > ${PROGRESS_FILE}
 deactivate
 

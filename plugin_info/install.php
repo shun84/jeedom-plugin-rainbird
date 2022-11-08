@@ -32,6 +32,10 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
           message::add('rainbird', __('Cette mise à jour nécessite absolument de relancer les dépendances même si elles apparaissent vertes', __FILE__));
       }
 
+      foreach (rainbird::byType('rainbird') as $rainbird){
+          $rainbird->save();
+      }
+
   }
 
 // Fonction exécutée automatiquement après la suppression du plugin
