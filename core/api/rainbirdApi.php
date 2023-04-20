@@ -2,7 +2,6 @@
 
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
-
 class rainbirdApi
 {
     private $iprainbird;
@@ -80,21 +79,24 @@ class rainbirdApi
         return $output;
     }
 
-    public function test_zone(int $zone){
+    public function test_zone(int $zone): array
+    {
         $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/test_zone.py "' . $this->iprainbird . '" "' . $this->mdprainbird . '" "'.$zone.'"';
         exec($cmd . ' 2>&1', $output);
 
         return $output;
     }
 
-    public function stop_irrigation(){
+    public function stop_irrigation(): array
+    {
         $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/stop_irrigation.py "' . $this->iprainbird . '" "' . $this->mdprainbird . '"';
         exec($cmd . ' 2>&1', $output);
 
         return $output;
     }
 
-    public function irrigate_zone(int $zone, int $timer){
+    public function irrigate_zone(int $zone, int $timer): array
+    {
         $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/irrigate_zone.py "' . $this->iprainbird . '" "' . $this->mdprainbird . '" "'.$zone.'" "'.$timer.'"';
         exec($cmd . ' 2>&1', $output);
 
@@ -109,7 +111,8 @@ class rainbirdApi
         return $output;
     }
 
-    public function set_rain_delay(string $days){
+    public function set_rain_delay(string $days): array
+    {
         $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/set_rain_delay.py "' . $this->iprainbird . '" "' . $this->mdprainbird . '" "'.$days.'"';
         exec($cmd . ' 2>&1', $output);
 
@@ -124,21 +127,24 @@ class rainbirdApi
         return $output;
     }
 
-    public function water_budget(int $budget){
+    public function water_budget(int $budget): array
+    {
         $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/water_budget.py "' . $this->iprainbird . '" "' . $this->mdprainbird . '" "'.$budget.'"';
         exec($cmd . ' 2>&1', $output);
 
         return $output;
     }
 
-    public function set_program(int $numbprog){
+    public function set_program(int $numbprog): array
+    {
         $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/set_program.py "' . $this->iprainbird . '" "' . $this->mdprainbird . '" "'.$numbprog.'"';
         exec($cmd . ' 2>&1', $output);
 
         return $output;
     }
 
-    public function advance_zone(int $numbzone){
+    public function advance_zone(int $numbzone): array
+    {
         $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/advance_zone.py "' . $this->iprainbird . '" "' . $this->mdprainbird . '" "'.$numbzone.'"';
         exec($cmd . ' 2>&1', $output);
 

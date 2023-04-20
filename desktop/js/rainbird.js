@@ -65,9 +65,9 @@ function addCmdToTable(_cmd) {
     tr += '<input class="tooltips cmdAttr form-control input-sm" data-l1key="unite" placeholder="Unité" title="{{Unité}}" style="width:30%;max-width:80px;display:inline-block;margin-right:2px;">'
     tr += '</div>'
     tr += '</td>'
-    tr += '<td>';
-    tr += '<span class="cmdAttr" data-l1key="htmlstate"></span>';
-    tr += '</td>';
+    tr += '<td>'
+    tr += '<span class="cmdAttr" data-l1key="htmlstate"></span>'
+    tr += '</td>'
     tr += '<td>'
     if (is_numeric(_cmd.id)) {
         tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fas fa-cogs"></i></a> '
@@ -81,7 +81,10 @@ function addCmdToTable(_cmd) {
         id:  $('.eqLogicAttr[data-l1key=id]').value(),
         filter: {type: 'info'},
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'})
+            jeedomUtils.showAlert({
+                message: error.message,
+                level: 'danger'
+            })
         },
         success: function (result) {
             tr.find('.cmdAttr[data-l1key=value]').append(result)

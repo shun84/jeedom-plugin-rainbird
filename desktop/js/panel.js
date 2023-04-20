@@ -1,14 +1,14 @@
-$(".in_datepicker").datepicker();
+jeedomUtils.datePickerInit()
 
-$('#bt_validChangeDate').on('click', function () {
-    jeedom.history.chart = [];
-    displayRainbird(object_id);
-});
+document.getElementById('bt_validChangeDate').addEventListener('click', function () {
+    jeedom.history.chart = []
+    displayRainbird(object_id)
+})
 
-displayRainbird(object_id);
+displayRainbird(object_id)
 
 function displayRainbird(object_id) {
-    $.ajax({
+    domUtils.ajax({
         type: 'POST',
         url: 'plugins/rainbird/core/ajax/rainbird.ajax.php',
         data: {
@@ -22,7 +22,10 @@ function displayRainbird(object_id) {
         },
         success: function (data) {
             if (data.state !== 'ok') {
-                $.fn.showAlert({message: data.result, level: 'danger'});
+                jeedomUtils.showAlert({
+                    message: data.result,
+                    level: 'danger'
+                })
             }
             let icon = '';
             if (isset(data.result.object.display) && isset(data.result.object.display.icon)) {
@@ -34,27 +37,30 @@ function displayRainbird(object_id) {
                 graphesRainbird(data.result.eqLogics[i].eqLogic.id, data.result.eqLogics[i].eqLogic.configuration.nbzone);
             }
         }
-    });
+    })
 }
 
 function graphesRainbird(_eqLogic_id, _nbzones) {
     jeedom.eqLogic.getCmd({
         id: _eqLogic_id,
         error: function (error) {
-            $.fn.showAlert({message: error.message, level: 'danger'});
+            jeedomUtils.showAlert({
+                message: error.message,
+                level: 'danger'
+            })
         },
         success: function (cmds) {
             for (let nbzone = 1; nbzone <= _nbzones; nbzone++){
-                jeedom.history.chart['rainbirdzone' + nbzone + _eqLogic_id] = null;
+                jeedom.history.chart['rainbirdzone' + nbzone + _eqLogic_id] = null
                 for (let i in cmds) {
                     if (cmds[i].logicalId === 'getzonelancer' + nbzone) {
                         jeedom.history.drawChart({
                             cmd_id: cmds[i].id,
-                            dateStart: $('#in_startDate').value(),
-                            dateEnd: $('#in_endDate').value(),
+                            dateStart: document.getElementById('in_startDate').value,
+                            dateEnd: document.getElementById('in_endDate').value,
                             el: 'rainbirdzone' + nbzone + _eqLogic_id
                         });
-                        document.getElementById('rainbirdzone'+ nbzone).innerHTML = '<div class="chartContainer" id="rainbirdzone' + nbzone + _eqLogic_id + '"></div>';
+                        document.getElementById('rainbirdzone'+ nbzone).innerHTML = '<div class="chartContainer" id="rainbirdzone' + nbzone + _eqLogic_id + '"></div>'
                     }
                 }
             }
