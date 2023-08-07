@@ -418,8 +418,8 @@ class rainbirdCmd extends cmd {
      */
     public function execute($_options = []) {
         $apirainbird = new rainbirdApi($this->getEqLogic()->getConfiguration('iprainbird'), $this->getEqLogic()->getConfiguration('mdprainbird'));
-        $rainbird = new rainbird();
-        $rainbird->verifConnexion($apirainbird);
+//        $rainbird = new rainbird();
+//        $rainbird->verifConnexion($apirainbird);
 
         for ($i = 1; $i <= $this->getEqLogic()->getConfiguration('nbzone'); $i++){
             if ($this->getLogicalId() === 'zonelancer'.$i){
