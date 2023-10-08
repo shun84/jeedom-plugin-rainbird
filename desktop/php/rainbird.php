@@ -128,7 +128,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 							<legend><i class="fas fa-cogs"></i> {{Paramètres}}</legend>
 							<div class="form-group">
 								<label for="iprainbird" class="col-sm-3 control-label">{{Ip du RainBird}}</label>
-								<div class="col-sm-7">
+								<div class="col-sm-2">
 									<input type="text" class="eqLogicAttr form-control" id="iprainbird" data-l1key="configuration" data-l2key="iprainbird"/>
 								</div>
 							</div>
@@ -136,16 +136,19 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 <label for="mdprainbird" class="col-sm-3 control-label">{{Mot de passe}}
                                     <sup><i class="fas fa-question-circle tooltips" title="{{C'est le mot de passe utilisé pour avoir accès à la configuration du RainBird}}"></i></sup>
                                 </label>
-                                <div class="col-sm-7">
-                                    <input type="password" class="eqLogicAttr form-control" id="mdprainbird" data-l1key="configuration" data-l2key="mdprainbird"/>
+                                <div class="input-group col-sm-2">
+                                    <input type="text" class="inputPassword eqLogicAttr form-control" id="mdprainbird" data-l1key="configuration" data-l2key="mdprainbird"/>
+                                    <span class="input-group-btn">
+                                        <a class="btn btn-default form-control bt_showPass roundedRight"><i class="fas fa-eye"></i></a>
+                                    </span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="nbzone" class="col-sm-3 control-label">{{Nombre de Zone}}
                                     <sup><i class="fas fa-question-circle tooltips" title="{{Récupérer par une fonction de l'API}}"></i></sup>
                                 </label>
-                                <div class="col-sm-7">
-                                    <input id="nbzone" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="nbzone" readonly>
+                                <div class="col-sm-1">
+                                    <input id="nbzone" class="center eqLogicAttr form-control" data-l1key="configuration" data-l2key="nbzone" readonly>
                                 </div>
                             </div>
 						</div>

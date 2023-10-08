@@ -4,6 +4,10 @@
 >
 >Pour rappel s'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte.
 
+# 08/10/2023
+- Utilisation de de la version **API 2.2.1** de **RainBird**
+- Modification de l'API coté Jeedom
+
 # 08/11/2022
 - Rajout de la fonction **get_model_and_version**
 - Rajout de la fonction **get_available_stations**
