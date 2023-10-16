@@ -5,6 +5,7 @@
 >Pour rappel s'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte.
 
 # 08/10/2023
+- Debian 11 Obligatoire pour utiliser **Python 3.9**
 - Utilisation de de la version **API 2.2.1** de **RainBird**
 - Modification de l'API coté Jeedom
 

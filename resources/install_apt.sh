@@ -23,11 +23,7 @@ echo "*****************************"
 echo "Install modules using apt-get"
 echo "*****************************"
 cd "${BASEDIR}"/pyrainbird
-
-if [ ! -d "env" ]; then
-  rm -r env
-fi
-
+rm -r env
 sudo apt-get install -y python3-venv
 python3 -m venv env
 echo 48 > "${PROGRESS_FILE}"
@@ -40,10 +36,6 @@ pip3 install --upgrade pip
 echo 58 > "${PROGRESS_FILE}"
 pip3 install pyrainbird==2.1.1
 echo 72 > "${PROGRESS_FILE}"
-pip3 install cffi
-echo 84 > "${PROGRESS_FILE}"
-pip3 install mitmproxy==9.0.1
-echo 90 > "${PROGRESS_FILE}"
 deactivate
 
 echo 100 > "${PROGRESS_FILE}"

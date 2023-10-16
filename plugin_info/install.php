@@ -20,11 +20,23 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 // Fonction exécutée automatiquement après l'installation du plugin
   function rainbird_install() {
+      log::add('rainbird', 'warn', 'Installation du Plugin Rain Bird');
 
+      if (version_compare(system::getOsVersion(), '11', '<')){
+          message::add('rainbird', 'Attention, votre version de Debian doit être en 11 minimum');
+      } else {
+          message::add('rainbird', 'Merci pour l\'installation de ce plugin, consultez la documentation avant utilisation svp');
+      }
   }
 
 // Fonction exécutée automatiquement après la mise à jour du plugin
   function rainbird_update() {
+      if (version_compare(system::getOsVersion(), '11', '<')){
+          message::add('rainbird', 'Attention, votre version de Debian doit être en 11 minimum');
+      } else {
+          message::add('rainbird', 'Merci pour la mise à jour de ce plugin, consultez la documentation avant utilisation svp');
+      }
+
       $dependencyInfo = rainbird::dependancy_info();
       if (!isset($dependencyInfo['state'])) {
           message::add('rainbird', __('Veuilez vérifier les dépendances', __FILE__));
@@ -35,7 +47,6 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
       foreach (rainbird::byType('rainbird') as $rainbird){
           $rainbird->save();
       }
-
   }
 
 // Fonction exécutée automatiquement après la suppression du plugin
