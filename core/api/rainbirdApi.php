@@ -17,7 +17,7 @@ class rainbirdApi
 
     public function get_model_and_version(): array
     {
-        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py get_model_and_version "' . $this->iprainbird . '" "' . $this->mdprainbird . '"';
+        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py get_model_and_version ' . $this->iprainbird . ' ' . $this->mdprainbird;
         exec($cmd . ' 2>&1', $output);
 
         if (substr($output[0],0, 5) === 'model'){
@@ -35,7 +35,7 @@ class rainbirdApi
     }
 
     public function get_available_stations(){
-        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py get_available_stations "' . $this->iprainbird . '" "' . $this->mdprainbird . '"';
+        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py get_available_stations ' . $this->iprainbird . ' ' . $this->mdprainbird;
         exec($cmd . ' 2>&1', $output);
 
         if (substr($output[0],0, 9) === 'available'){
@@ -57,7 +57,7 @@ class rainbirdApi
 
     public function get_serial_number(): array
     {
-        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py get_serial_number "' . $this->iprainbird . '" "' . $this->mdprainbird . '"';
+        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py get_serial_number ' . $this->iprainbird . ' ' . $this->mdprainbird;
         exec($cmd . ' 2>&1', $output);
 
         return $output;
@@ -65,7 +65,7 @@ class rainbirdApi
 
     public function get_current_date(): array
     {
-        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py get_current_date "' . $this->iprainbird . '" "' . $this->mdprainbird . '"';
+        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py get_current_date ' . $this->iprainbird . ' ' . $this->mdprainbird;
         exec($cmd . ' 2>&1', $output);
 
         return $output;
@@ -73,7 +73,7 @@ class rainbirdApi
 
     public function get_current_time(): array
     {
-        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py get_current_time "' . $this->iprainbird . '" "' . $this->mdprainbird . '"';
+        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py get_current_time ' . $this->iprainbird . ' ' . $this->mdprainbird;
         exec($cmd . ' 2>&1', $output);
 
         return $output;
@@ -81,7 +81,7 @@ class rainbirdApi
 
     public function test_zone(int $zone): array
     {
-        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py test_zone "' . $this->iprainbird . '" "' . $this->mdprainbird . '" "'.$zone.'"';
+        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py test_zone ' . $zone . ' ' . $this->iprainbird . ' '.$this->mdprainbird;
         exec($cmd . ' 2>&1', $output);
 
         return $output;
@@ -89,7 +89,7 @@ class rainbirdApi
 
     public function stop_irrigation(): array
     {
-        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py stop_irrigation "' . $this->iprainbird . '" "' . $this->mdprainbird . '"';
+        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py stop_irrigation ' . $this->iprainbird . ' ' . $this->mdprainbird;
         exec($cmd . ' 2>&1', $output);
 
         return $output;
@@ -97,7 +97,7 @@ class rainbirdApi
 
     public function irrigate_zone(int $zone, int $timer): array
     {
-        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py irrigate_zone "' . $this->iprainbird . '" "' . $this->mdprainbird . '" "'.$zone.'" "'.$timer.'"';
+        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py irrigate_zone ' . $zone . ' ' . $timer . ' '.$this->iprainbird.' '.$this->mdprainbird;
         exec($cmd . ' 2>&1', $output);
 
         return $output;
@@ -105,7 +105,7 @@ class rainbirdApi
 
     public function get_rain_delay(): array
     {
-        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py get_rain_delay "' . $this->iprainbird . '" "' . $this->mdprainbird . '"';
+        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py get_rain_delay ' . $this->iprainbird . ' ' . $this->mdprainbird;
         exec($cmd . ' 2>&1', $output);
 
         return $output;
@@ -113,7 +113,7 @@ class rainbirdApi
 
     public function set_rain_delay(string $days): array
     {
-        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py set_rain_delay "' . $this->iprainbird . '" "' . $this->mdprainbird . '" "'.$days.'"';
+        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py set_rain_delay ' . $days . ' ' . $this->iprainbird . ' '.$this->mdprainbird;
         exec($cmd . ' 2>&1', $output);
 
         return $output;
@@ -121,7 +121,7 @@ class rainbirdApi
 
     public function get_zone_state(int $zone): array
     {
-        $cmd = $this->resource_path.'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py get_zone_state "' . $this->iprainbird . '" "' . $this->mdprainbird . '" '.$zone;
+        $cmd = $this->resource_path.'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py get_zone_state ' . $zone . ' ' . $this->iprainbird . ' '.$this->mdprainbird;
         exec($cmd . ' 2>&1', $output);
 
         return $output;
@@ -129,7 +129,7 @@ class rainbirdApi
 
     public function water_budget(int $budget): array
     {
-        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py water_budget "' . $this->iprainbird . '" "' . $this->mdprainbird . '" "'.$budget.'"';
+        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py water_budget ' . $budget . ' ' . $this->iprainbird . ' '.$this->mdprainbird;
         exec($cmd . ' 2>&1', $output);
 
         return $output;
@@ -137,7 +137,7 @@ class rainbirdApi
 
     public function set_program(int $numbprog): array
     {
-        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py set_program "' . $this->iprainbird . '" "' . $this->mdprainbird . '" "'.$numbprog.'"';
+        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py set_program ' . $numbprog . ' ' . $this->iprainbird . ' '.$this->mdprainbird;
         exec($cmd . ' 2>&1', $output);
 
         return $output;
@@ -145,7 +145,7 @@ class rainbirdApi
 
     public function advance_zone(int $numbzone): array
     {
-        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py advance_zone "' . $this->iprainbird . '" "' . $this->mdprainbird . '" "'.$numbzone.'"';
+        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py advance_zone ' . $numbzone . ' ' . $this->iprainbird . ' '.$this->mdprainbird;
         exec($cmd . ' 2>&1', $output);
 
         return $output;
@@ -153,7 +153,7 @@ class rainbirdApi
 
     public function get_rain_sensor_state(): array
     {
-        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py get_rain_sensor_state "' . $this->iprainbird . '" "' . $this->mdprainbird . '"';
+        $cmd = $this->resource_path .'/pyrainbird/env/bin/python3 ' . $this->resource_path. '/rainbird_tool.py get_rain_sensor_state ' . $this->iprainbird . ' ' . $this->mdprainbird;
         exec($cmd . ' 2>&1', $output);
 
         return $output;
